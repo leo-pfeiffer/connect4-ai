@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 #build the foundations and get familiar with programme
 # initialise board
@@ -43,7 +44,7 @@ def so_won (board,piece):
 
 
 over=False
-turn=0
+turn=0 # vielleicht Start ebenfalls zufällig generieren (mit random.randint(0,1))
 while not over:
 
     if turn==0:
@@ -55,9 +56,9 @@ while not over:
             if so_won(board,1):
                 print("P1 wins")
                 over=True
-
+# P2 ist jetzt "automatisiert": zufälliges Einsetzen
     else:
-        selected_col = int(input("P2 choose (0-6):"))
+        selected_col = random.randint(0,6)
         if legal_check(board,selected_col):
             row= where_it_lands(board,selected_col)
             play(board,row,selected_col,2)
