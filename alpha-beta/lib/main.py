@@ -8,38 +8,69 @@ def build_board():
 board=build_board()
 print(board)
 
+def print_right_way (board):
+    print(np.flip(board,0))
+
+def legal_check (board,selected_col):
+    return board[5][selected_col] == 0
+
+def where_it_lands (board,selected_col):
+    for r in range(6):
+        if board [r][selected_col] == 0:
+            return r
+def play (board, row, selected_col, piece):
+    board[row][selected_col] = piece
+
+def so_won (board,piece):
+    for c in range(4):
+        for r in range(6):
+            if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
+                return True
+    for c in range(7):
+        for r in range(3):
+            if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
+                return True
+    for c in range(4):
+        for r in range(3):
+            if board[r][c] == piece and board[r + 1][c+1] == piece and board[r + 2][c+2] == piece and board[r + 3][
+                c+3] == piece:
+                return True
+    for c in range(4):
+        for r in range(3,6):
+            if board[r][c] == piece and board[r - 1][c+1] == piece and board[r - 2][c+2] == piece and board[r - 3][
+                c+3] == piece:
+                return True
+
+
 over=False
+turn=0
 while not over:
-    # alpha-beta pruning's turn
 
-    #player two's turn
+    if turn==0:
+        selected_col= int(input("P1 choose (0-6):"))
+        if legal_check(board,selected_col):
+            row= where_it_lands(board,selected_col)
+            play(board,row,selected_col,1)
+
+            if so_won(board,1):
+                print("P1 wins")
+                over=True
+
+    else:
+        selected_col = int(input("P2 choose (0-6):"))
+        if legal_check(board,selected_col):
+            row= where_it_lands(board,selected_col)
+            play(board,row,selected_col,2)
+
+            if so_won(board,2):
+                print("P2 wins")
+                over=True
+
+    print_right_way(board)
+
+    turn += 1
+    turn = turn % 2
 
 
-# try to make a somewhat useful code for alpha- beta algorithm
 
-class Alpha_Beta:
-    def __init__(self,tree):
-        self.tree=tree     # incorporate game tree
-        self.              # refer to root node
-        self.current_node=  # current Game node
-        self.sucessors=[]   # list of possible child nodes
 
-    def alpha_beta_search (self,node):
-        # zunächst einen Minimax-Algorithmus
-        # suche maximalen Wert und dessen Knoten
-        # update -> move
-        # suche anschließend minimalen Wert usw.
-        # backpropagation und Aktualisieren von alpha und beta
-
-        max_val=self.max_value(node)
-        max_node= self.get_max_node(node)
-
-    def max_value (self,node):
-        #wenn der Knoten ein leave ist gib eigenen Wert wieder
-        # wenn nicht gib den maximalen Wert seiner child nodes wieder
-
-    def get_max_node(self,node):
-        child_node=self.get_child_node(node)
-
-    def get_child_node(self,node):
-        #Funktion die alle child nodes ermittelt
