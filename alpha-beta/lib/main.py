@@ -42,6 +42,10 @@ def so_won (board,piece):
                 c+3] == piece:
                 return True
 
+def value_function (board,piece):
+    # nach welchen Kriterien soll bewertet werden?
+    # Was bringt einem Speler einen Vorteil? - Anzahl an 2er- 3er-Reihen
+
 
 over=False
 turn=0 # vielleicht Start ebenfalls zufällig generieren (mit random.randint(0,1))
