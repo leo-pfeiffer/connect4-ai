@@ -65,15 +65,36 @@ def value_function (board, piece):
                 score += 30
             elif window.count(piece)==2 and window.count(0)== 2:
                 score += 10
-    return score
 
+    for r in range(3):
+        for c in range (4):
+            window= [board[r+i][c+i] for i in range(4)]
+            if window.count(piece)==4:
+                score +=100
+            elif window.count(piece)==3 and window.count(0)== 1:
+                score += 30
+            elif window.count(piece)==2 and window.count(0)== 2:
+                score += 10
+
+    for r in range(3):
+        for c in range (4):
+            window= [board[r+3-i][c+i] for i in range(4)]
+            if window.count(piece)==4:
+                score +=100
+            elif window.count(piece)==3 and window.count(0)== 1:
+                score += 30
+            elif window.count(piece)==2 and window.count(0)== 2:
+                score += 10
+
+    return score
+# returns list of possible next locations
 def valid_locations (board):
     locations=[]
     for selected_col in range(7):
         if legal_check(board,selected_col):
             locations.append(selected_col)
     return locations
-
+# function on which the algorithm's move is based
 def AI_move (board,piece):
     locations=valid_locations(board)
     best_score=0
