@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import math
 
 #build the foundations and get familiar with programme
 # initialise board
@@ -45,6 +46,9 @@ def so_won (board,piece):
 # returns a value of an action
 def value_function (board, piece):
     score=0
+    opp_piece=1
+    if piece == 1:
+        opp_piece=2
     for r in range(6):
         row_array=[int(i) for i in list(board[r,:])]
         for c in range (4):
@@ -55,6 +59,9 @@ def value_function (board, piece):
                 score += 30
             elif window.count(piece)==2 and window.count(0)== 2:
                 score += 10
+
+            if window.count(opp_piece)==3 and window.count(0)==1:
+                score-= 31
     for c in range(7):
         col_array=[int(i) for i in list(board[:,c])]
         for r in range (3):
@@ -65,6 +72,8 @@ def value_function (board, piece):
                 score += 30
             elif window.count(piece)==2 and window.count(0)== 2:
                 score += 10
+            if window.count(opp_piece)==3 and window.count(0)==1:
+                score-= 31
 
     for r in range(3):
         for c in range (4):
@@ -75,6 +84,8 @@ def value_function (board, piece):
                 score += 30
             elif window.count(piece)==2 and window.count(0)== 2:
                 score += 10
+            if window.count(opp_piece)==3 and window.count(0)==1:
+                score-= 31
 
     for r in range(3):
         for c in range (4):
@@ -85,8 +96,54 @@ def value_function (board, piece):
                 score += 30
             elif window.count(piece)==2 and window.count(0)== 2:
                 score += 10
+            if window.count(opp_piece)==3 and window.count(0)==1:
+                score-= 31
 
     return score
+
+def terminal_node(board):
+    return so_won(board,piece=1) or so_won(board,piece=2) or len(valid_locations(board))==0
+
+# Minimax funktion nach Pseudocode Wikipedia
+def minimax (board,depth,maximising_Player):
+    valid_location=valid_locations(board)
+    is_terminal=terminal_node(board)
+    if depth==0 or is_terminal:
+        if is_terminal:
+            if so_won(board,2):
+                return (None,100000)
+            elif so_won(board,1):
+                return (None,-100000)
+            else:
+                return (None,0)
+        else:
+            return (None,value_function(board,2))
+    if maximising_Player:
+        score= -math.inf
+        column = random.choice(valid_location)
+        for selected_col in valid_location:
+            row= where_it_lands(board,selected_col)
+            board_copy= board.copy()
+            play(board_copy,row,selected_col,2)
+            new_score= minimax(board_copy,depth-1,False)[1]
+            if new_score > score:
+                score=new_score
+                column=selected_col
+        return column, score
+    else:
+        score = math.inf
+        column=random.choice(valid_location)
+        for selected_col in valid_location:
+            row = where_it_lands(board, selected_col)
+            board_copy = board.copy()
+            play(board_copy, row, selected_col, 1)
+            new_score = minimax(board_copy, depth - 1, True)[1]
+            if new_score < score:
+                score=new_score
+                column=selected_col
+        return column, score
+
+
 # returns list of possible next locations
 def valid_locations (board):
     locations=[]
@@ -94,20 +151,7 @@ def valid_locations (board):
         if legal_check(board,selected_col):
             locations.append(selected_col)
     return locations
-# function on which the algorithm's move is based
-def AI_move (board,piece):
-    locations=valid_locations(board)
-    best_score=0
-    col_move=random.choice(locations)
-    for selected_col in locations:
-        row= where_it_lands(board,selected_col)
-        copied_board=board.copy()
-        play(copied_board,row,selected_col,piece)
-        score= value_function(copied_board,piece)
-        if score> best_score:
-            best_score= score
-            col_move=selected_col
-    return col_move
+
 
 over=False
 turn=0
@@ -124,13 +168,14 @@ while not over:
                 over=True
 
     else:
-        selected_col = AI_move(board,2)
+
+        selected_col, minimax_score=minimax(board,3,True)
         if legal_check(board,selected_col):
             row= where_it_lands(board,selected_col)
             play(board,row,selected_col,2)
 
             if so_won(board,2):
-                print("P2 wins")
+                print("AI wins")
                 over=True
 
     print_right_way(board)
