@@ -105,7 +105,7 @@ def terminal_node(board):
     return so_won(board,piece=1) or so_won(board,piece=2) or len(valid_locations(board))==0
 
 # Minimax funktion nach Pseudocode Wikipedia
-def minimax (board,depth,maximising_Player):
+def minimax (board,depth, alpha, beta ,maximising_Player):
     valid_location=valid_locations(board)
     is_terminal=terminal_node(board)
     if depth==0 or is_terminal:
@@ -125,10 +125,13 @@ def minimax (board,depth,maximising_Player):
             row= where_it_lands(board,selected_col)
             board_copy= board.copy()
             play(board_copy,row,selected_col,2)
-            new_score= minimax(board_copy,depth-1,False)[1]
+            new_score= minimax(board_copy,depth-1,alpha,beta,False)[1]
             if new_score > score:
                 score=new_score
                 column=selected_col
+            alpha= max(alpha,score)
+            if alpha >= beta:
+                break
         return column, score
     else:
         score = math.inf
@@ -137,10 +140,13 @@ def minimax (board,depth,maximising_Player):
             row = where_it_lands(board, selected_col)
             board_copy = board.copy()
             play(board_copy, row, selected_col, 1)
-            new_score = minimax(board_copy, depth - 1, True)[1]
+            new_score = minimax(board_copy, depth - 1,alpha,beta, True)[1]
             if new_score < score:
                 score=new_score
                 column=selected_col
+            beta = min(beta, score)
+            if alpha >= beta:
+                break
         return column, score
 
 
@@ -169,7 +175,7 @@ while not over:
 
     else:
 
-        selected_col, minimax_score=minimax(board,3,True)
+        selected_col, minimax_score=minimax(board,3,-math.inf,math.inf,True)
         if legal_check(board,selected_col):
             row= where_it_lands(board,selected_col)
             play(board,row,selected_col,2)
