@@ -2,27 +2,32 @@ import numpy as np
 import random
 import math
 
-#build the foundations and get familiar with programme
+
 # initialise board
 def build_board():
     board=np.zeros((6,7))
     return board
 board=build_board()
 print(board)
+
 # flip the board
 def print_right_way (board):
     print(np.flip(board,0))
+
 # checks if colums are legal to be played
 def legal_check (board,selected_col):
     return board[5][selected_col] == 0
+
 # gives the row where piece lands
 def where_it_lands (board,selected_col):
     for r in range(6):
         if board [r][selected_col] == 0:
             return r
+
 # changes matrix entry
 def play (board, row, selected_col, piece):
     board[row][selected_col] = piece
+
 # deterines if there is a winner
 def so_won (board,piece):
     for c in range(4):
@@ -43,7 +48,9 @@ def so_won (board,piece):
             if board[r][c] == piece and board[r - 1][c+1] == piece and board[r - 2][c+2] == piece and board[r - 3][
                 c+3] == piece:
                 return True
+
 # returns a value of an action
+# values are abitrary....room for improvements?
 def value_function (board, piece):
     score=0
     opp_piece=1
@@ -101,17 +108,18 @@ def value_function (board, piece):
 
     return score
 
+# determines if node is a terminal node
 def terminal_node(board):
     return so_won(board,piece=1) or so_won(board,piece=2) or len(valid_locations(board))==0
 
-# Minimax funktion nach Pseudocode Wikipedia
+# alpha-beta aufbauend auf Pseudocode Wikipedia
 def minimax (board,depth, alpha, beta ,maximising_Player):
     valid_location=valid_locations(board)
     is_terminal=terminal_node(board)
     if depth==0 or is_terminal:
         if is_terminal:
             if so_won(board,2):
-                return (None,100000)
+                return (None,100000) # immer zwei Einträge weil ich Platz für Speichern der Spalte brauche
             elif so_won(board,1):
                 return (None,-100000)
             else:
