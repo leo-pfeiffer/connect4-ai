@@ -103,6 +103,11 @@ class Board:
         if x & (x >> 2 * 7):
             return True
 
+        """ # Why doesn't this work to check horizontal: Fails test2
+        x = checkBoard & (checkBoard >> 1)
+        if x & (x >> 2 * 1):
+            return True
+        """
         # Check - (horizontal)
 
         tester = 0b1111     # tester is active for elements 0, 1, 2, 3

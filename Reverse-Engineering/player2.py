@@ -21,44 +21,44 @@ class Player:
         # evaluation fuction : Maximizes the center of the board
 
     def evalfunc(self):
-        #         count = 0
-        #         lcount = 0
-        #         fcount = 0
+        # count = 0
+        # lcount = 0
+        # fcount = 0
         #
-        #         for x in range(0,5):
-        #             for y in range(0,2):
-        #                 if(self.b.state[(x,y)] == self.maxPlayer):
-        #                     if(self.b.state[(x+1,y)] == self.maxPlayer and self.b.state[(x+1,y)] == self.maxPlayer):
-        #                         lcount+=1
-        #                     if(self.b.state[(x,y+1)] == self.maxPlayer and self.b.state[(x,y+2)] == self.maxPlayer):
-        #                         lcount+=1
-        #                     if(self.b.state[(x+1,y+1)] == self.maxPlayer and self.b.state[(x+2,y+2)] == self.maxPlayer):
-        #                         lcount+=1
+        # for x in range(0,5):
+        #     for y in range(0,2):
+        #         if(self.b.state[(x,y)] == self.maxPlayer):
+        #             if(self.b.state[(x+1,y)] == self.maxPlayer and self.b.state[(x+1,y)] == self.maxPlayer):
+        #                 lcount+=1
+        #             if(self.b.state[(x,y+1)] == self.maxPlayer and self.b.state[(x,y+2)] == self.maxPlayer):
+        #                 lcount+=1
+        #             if(self.b.state[(x+1,y+1)] == self.maxPlayer and self.b.state[(x+2,y+2)] == self.maxPlayer):
+        #                 lcount+=1
         #
-        #         for i in range(0,6):
-        #             if(self.b.state[(3,i)] == self.maxPlayer):
-        #                 count+=1
-        #         fcount = count*5
-        #         count= 0
-        #         for i in range(0,6):
-        #             if(self.b.state[(2,i)] == self.maxPlayer):
-        #                 count+=1
-        #         fcount += count*3
-        #         count= 0
-        #         for i in range(0,6):
-        #             if(self.b.state[(4,i)] == self.maxPlayer):
-        #                 count+=1
-        #         fcount += count*3
-        #         count= 0
-        #         for i in range(0,6):
-        #             if(self.b.state[(5,i)] == self.maxPlayer):
-        #                 count+=1
-        #         fcount += count*2
-        #         count= 0
-        #         for i in range(0,6):
-        #             if(self.b.state[(1,i)] == self.maxPlayer):
-        #                 count+=1
-        #         fcount += count*2
+        # for i in range(0,6):
+        #     if(self.b.state[(3,i)] == self.maxPlayer):
+        #         count+=1
+        # fcount = count*5
+        # count= 0
+        # for i in range(0,6):
+        #     if(self.b.state[(2,i)] == self.maxPlayer):
+        #         count+=1
+        # fcount += count*3
+        # count= 0
+        # for i in range(0,6):
+        #     if(self.b.state[(4,i)] == self.maxPlayer):
+        #         count+=1
+        # fcount += count*3
+        # count= 0
+        # for i in range(0,6):
+        #     if(self.b.state[(5,i)] == self.maxPlayer):
+        #         count+=1
+        # fcount += count*2
+        # count= 0
+        # for i in range(0,6):
+        #     if(self.b.state[(1,i)] == self.maxPlayer):
+        #         count+=1
+        # fcount += count*2
 
         return 100
 
@@ -122,6 +122,6 @@ class Player:
         #         else:
         #             self.winner(8, 8,-10000,10000)
 
-        print(self.last)
+        print(self.last)    # What is self.last??
         i = self.last.index(max(self.last))
         return self.b.generate_moves()[i]

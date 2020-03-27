@@ -18,6 +18,7 @@ class Alpha_Beta:
         max_node= self.get_max_node(node)
 
     def max_value (self,node):
+        pass
         #wenn der Knoten ein leave ist gib eigenen Wert wieder
         # wenn nicht gib den maximalen Wert seiner child nodes wieder
 
@@ -25,4 +26,5 @@ class Alpha_Beta:
         child_node=self.get_child_node(node)
 
     def get_child_node(self,node):
+        pass
         #Funktion die alle child nodes ermittelt

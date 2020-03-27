@@ -99,18 +99,17 @@ def test_Q4():
     while not b.last_move_won() and len(legal_moves) > 0:  # cond 1: Have winner; cond 2: Draw
         start_time = time.time()
 
-        # get best move according to defined algorithm
-        move = players[i].get_move()
+        move = players[i].get_move()        # get move according to the algorithm the current player
         print("--- %s seconds ---" % (time.time() - start_time))
-        print(move)
+        print("MOVE: {}".format(move))
 
-        players[0].make_move(move)
-        players[1].make_move(move)
-        b.make_move(move)
+        players[0].make_move(move)          # save move to first player's board
+        players[1].make_move(move)          # save move to second player's board
+        b.make_move(move)                   # add current move to playing board
         count += 1
-        print(count)
-        i ^= 1
-        legal_moves = b.generate_moves()
+        print("COUNT: {}".format(count))
+        i ^= 1                              # change player
+        legal_moves = b.generate_moves()    # update legal moves
 
     if b.last_move_won():
         print("VICTORY FOR PLAYER " + players[i ^ 1].name())
@@ -119,6 +118,6 @@ def test_Q4():
 
 
 # test_Q1()
-test_Q2()
+# test_Q2()
 # test_Q3()
-# test_Q4()
+test_Q4()
