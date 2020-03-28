@@ -114,7 +114,7 @@ def value_function(board, piece):
 
 # determines if node is a terminal node
 def terminal_node(board):
-    return any(so_won(board, piece=1), so_won(board, piece=2), len(valid_locations(board)) == 0)
+    return any([so_won(board, piece=1), so_won(board, piece=2), len(valid_locations(board)) == 0])
 
 
 # alpha-beta aufbauend auf Pseudocode Wikipedia
