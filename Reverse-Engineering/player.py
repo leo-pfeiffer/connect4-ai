@@ -41,15 +41,20 @@ class Player:
         count = 0
         minCount = 0
 
-        vertCheck = 0b100000010000001
+        vertCheck = 0b100000010000001   # positions 0, 7, 14 => |-line
         empty = 0b1
-        posCheck = 0b10000000100000001
-        negCheck = 0b1000001000001
+        posCheck = 0b10000000100000001  # positions 0, 8, 16 => /-diagonal
+        negCheck = 0b1000001000001      # positions 0, 6, 12 => \-diagonal
         for i in range(7, 21):
+            # if testB has 3 vertically connected and testQ has
             if (testB & (vertCheck << i)) == (vertCheck << i) and (testQ & (empty << i + 28) == 0):
                 count += add
+
+            # if testB has 3 /-diagonally connected and testQ
             if (testB & (posCheck << i)) == (posCheck << i) and (testQ & (empty << i) == 0):
                 count += add
+
+            # if test B has 3 \-diagonally connected and testQ
             if (testB & (negCheck << i)) == (negCheck << i) and (testQ & (empty << i) == 0):
                 count += add
 
@@ -86,7 +91,7 @@ class Player:
             return self.evalfunc()
 
         # reached maximum depth without finding better value??
-        if len(self.b.hist) + depth > 7:
+        if len(self.b.hist) + depth > 7:    # self.b.hist only changed during actual call of make_move()
             if self.b.last_move_won():
                 if self.b.Player == self.maxPlayer:
                     return -10000
@@ -110,9 +115,7 @@ class Player:
                 # Pruning if not alpha <= value <= beta
                 self.b.unmake_last_move()
             if depth == d:
-                # This is the value that is passed back from the original call of winner()
-                # since in no recursive step depth == d.
-                # Final value of the move -> Passed upwards during recursion
+                # Only done during original call of winner().
                 return self.last
             else:
                 # This is the value passed back during recursive calls of winner()
