@@ -3,8 +3,8 @@
 class Alpha_Beta:
     def __init__(self,tree):
         self.tree=tree     # incorporate game tree
-        self.              # refer to root node
-        self.current_node=  # current Game node
+        self.root              # refer to root node
+        self.current_node=0  # current Game node
         self.sucessors=[]   # list of possible child nodes
 
     def alpha_beta_search (self,node):

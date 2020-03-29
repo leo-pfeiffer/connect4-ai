@@ -184,7 +184,7 @@ if __name__ == '__main__':
     turn = 0
 
     while not over:
-
+        # NEED TO HANDLE DRAWS!
         # Human
         if turn == 0:
             selected_col = int(input("P1 choose (0-6):"))
@@ -214,5 +214,4 @@ if __name__ == '__main__':
 
         print_right_way(board)
 
-        turn += 1
-        turn = turn % 2
+        turn ^= 1
