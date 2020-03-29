@@ -8,8 +8,9 @@ from lib.main import build_board, legal_check, where_it_lands, play, so_won, pri
 
 class MCTS:
 
-    def __init__(self, board):
+    def __init__(self, board, no):
         self.board = board
+        self.no = no    # Is MCTS Player 1 or Player 2
         self.values = np.zeros((6, 7))
         self.N = 0  # number of visits from child node = # of turns per simulation
         self.cur_visits = np.zeros((6, 7), dtype=int)  # reset during every new selection.
@@ -39,13 +40,13 @@ class MCTS:
 
     def expansion(self, child):
         temp_board = self.board.copy()
-        play(temp_board, child[0], child[1], 2)
+        play(temp_board, child[0], child[1], self.no)
         if terminal_node(temp_board):
             self.N += 1
-            if so_won(self.board, 2):  # AI won
+            if so_won(self.board, self.no):  # MCTS won
                 self.values[child[0]][child[1]] = (self.values[child[0]][child[1]] * (self.N - 1) + 1) / self.N
                 return 1
-            elif so_won(self.board, 1):  # Human won
+            elif so_won(self.board, 3 - self.no):  # Opponent won
                 self.values[child[0]][child[1]] = (self.values[child[0]][child[1]] * (self.N - 1)) / self.N
             else:  # Draw
                 self.values[child[0]][child[1]] = (self.values[child[0]][child[1]] * (self.N - 1) + 0.5) / self.N
@@ -53,12 +54,13 @@ class MCTS:
             self.simulation(child)
 
     def simulation(self, child):
+        print("AI is thinking... give it a second.\n============")
         startTime = time.time()
         outtaTime = False
 
         while not outtaTime:
             simu_board = self.board.copy()
-            play(simu_board, child[0], child[1], 2)
+            play(simu_board, child[0], child[1], self.no)
 
             over = False
             turn = 0
@@ -66,6 +68,7 @@ class MCTS:
             while not over:
 
                 # Turn changes from 0 to 1 in each iteration. AI = 1, Human = 0.
+                # Human behaves very stupid and chooses randomly.
                 try:
                     selected_col = random.choice(valid_locations(simu_board))
                 # if no valid_locations left but no winner => DRAW. Backpropagate 0.5
@@ -81,7 +84,7 @@ class MCTS:
 
                 play(simu_board, row, selected_col, turn + 1)
 
-                if so_won(board, turn + 1):
+                if so_won(simu_board, turn + 1):
                     # backpropagate result from perspective of AI: 1 if win, 0 if loss
                     self.backpropagation(result=turn)
                     over = True
@@ -121,11 +124,12 @@ if __name__ == '__main__':
 
     board = build_board()
     print(board)
+    print("============\n")
 
     over = False
     turn = 0
 
-    M = MCTS(board)
+    M = MCTS(board, no=2)
 
     while not over:
 
@@ -137,11 +141,11 @@ if __name__ == '__main__':
                 play(board, row, selected_col, 1)
 
                 if so_won(board, 1):
-                    print("P1 wins")
+                    print("Human wins. Congratulations, John Henry.")
                     over = True
             # If illegal column is selected, ask the user again. => Outsourcing in function necessary
             else:
-                print("Selected illegal column. Idiot! GAME OVER!")
+                print("Selected illegal column. Idiot! Your intelligence is artificial. GAME OVER!")
                 break
 
         # AI
@@ -152,9 +156,10 @@ if __name__ == '__main__':
             play(board, row, selected_col, 2)
 
             if so_won(board, 2):
-                print("AI wins")
+                print("AI wins. Death to humanity!")
                 over = True
 
         print_right_way(board)
+        print("============\n")
 
         turn ^= 1

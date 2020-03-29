@@ -193,23 +193,22 @@ if __name__ == '__main__':
                 play(board, row, selected_col, 1)
 
                 if so_won(board, 1):
-                    print("P1 wins")
+                    print("Human wins. Congratulations, John Henry.")
                     over = True
             # If illegal column is selected, ask the user again. => Outsourcing in function necessary
             else:
                 print("Selected illegal column. Idiot! GAME OVER!")
                 break
 
-        # AI
+        # Alphabeta
         else:
-
             selected_col, minimax_score = minimax(board, 3, -math.inf, math.inf, True)
             if legal_check(board, selected_col):
                 row = where_it_lands(board, selected_col)
                 play(board, row, selected_col, 2)
 
                 if so_won(board, 2):
-                    print("AI wins")
+                    print("AI wins. Death to humanity!")
                     over = True
 
         print_right_way(board)
