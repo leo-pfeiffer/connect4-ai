@@ -46,7 +46,7 @@ class GameTree:
     def ddd(self):
         self.create_tree()
 
-G = GameTree(levels=10, childs=4)
+G = GameTree(levels=3, childs=4)
 G.levels
 G.create_tree()
 

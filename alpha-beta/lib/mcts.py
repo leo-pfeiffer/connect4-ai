@@ -2,8 +2,7 @@ import math
 import numpy as np
 import random
 import time
-from lib.main import build_board, legal_check, where_it_lands, play, so_won, print_right_way, valid_locations, \
-    terminal_node
+from lib.main import Board
 
 
 class MCTS:
@@ -20,7 +19,7 @@ class MCTS:
         self.board = board
         self.cur_visits = np.zeros((6, 7), dtype=int)  # n_j
 
-        legal_cols = valid_locations(board)
+        legal_cols = Board.valid_locations(board)
         leg_mov_rows = self.legal_cols_row(self.board, legal_cols)
         legal_pos = [(r, c) for r, c in zip(leg_mov_rows, legal_cols)]
 
@@ -40,13 +39,13 @@ class MCTS:
 
     def expansion(self, child):
         temp_board = self.board.copy()
-        play(temp_board, child[0], child[1], self.no)
-        if terminal_node(temp_board):
+        Board.play(temp_board, child[0], child[1], self.no)
+        if Board.terminal_node(temp_board):
             self.N += 1
-            if so_won(self.board, self.no):  # MCTS won
+            if Board.so_won(self.board, self.no):  # MCTS won
                 self.values[child[0]][child[1]] = (self.values[child[0]][child[1]] * (self.N - 1) + 1) / self.N
                 return 1
-            elif so_won(self.board, 3 - self.no):  # Opponent won
+            elif Board.so_won(self.board, 3 - self.no):  # Opponent won
                 self.values[child[0]][child[1]] = (self.values[child[0]][child[1]] * (self.N - 1)) / self.N
             else:  # Draw
                 self.values[child[0]][child[1]] = (self.values[child[0]][child[1]] * (self.N - 1) + 0.5) / self.N
@@ -60,7 +59,7 @@ class MCTS:
 
         while not outtaTime:
             simu_board = self.board.copy()
-            play(simu_board, child[0], child[1], self.no)
+            Board.play(simu_board, child[0], child[1], self.no)
 
             over = False
             turn = 0
@@ -70,21 +69,21 @@ class MCTS:
                 # Turn changes from 0 to 1 in each iteration. AI = 1, Human = 0.
                 # Human behaves very stupid and chooses randomly.
                 try:
-                    selected_col = random.choice(valid_locations(simu_board))
+                    selected_col = random.choice(Board.valid_locations(simu_board))
                 # if no valid_locations left but no winner => DRAW. Backpropagate 0.5
                 except IndexError:
                     self.backpropagation(result=0.5)
                     break
-                row = where_it_lands(simu_board, selected_col)
+                row = Board.where_it_lands(simu_board, selected_col)
 
                 if turn == 1:
                     self.cur_visits[row][selected_col] += 1         # update n of simulated nodes
                     self.N += 1      # update N of child_node
                     self.involved_nodes.append((row, selected_col))
 
-                play(simu_board, row, selected_col, turn + 1)
+                Board.play(simu_board, row, selected_col, turn + 1)
 
-                if so_won(simu_board, turn + 1):
+                if Board.so_won(simu_board, turn + 1):
                     # backpropagate result from perspective of AI: 1 if win, 0 if loss
                     self.backpropagation(result=turn)
                     over = True
@@ -122,7 +121,7 @@ class MCTS:
 
 if __name__ == '__main__':
 
-    board = build_board()
+    board = Board.build_board()
     print(board)
     print("============\n")
 
@@ -136,11 +135,11 @@ if __name__ == '__main__':
         # Human
         if turn == 0:
             selected_col = int(input("P1 choose (0-6):"))
-            if legal_check(board, selected_col):
-                row = where_it_lands(board, selected_col)
-                play(board, row, selected_col, 1)
+            if Board.legal_check(board, selected_col):
+                row = Board.where_it_lands(board, selected_col)
+                Board.play(board, row, selected_col, 1)
 
-                if so_won(board, 1):
+                if Board.so_won(board, 1):
                     print("Human wins. Congratulations, John Henry.")
                     over = True
             # If illegal column is selected, ask the user again. => Outsourcing in function necessary
@@ -152,14 +151,14 @@ if __name__ == '__main__':
         else:
             # get the best move
             selected_col = M.selection(board=board)
-            row = where_it_lands(board, selected_col)
-            play(board, row, selected_col, 2)
+            row = Board.where_it_lands(board, selected_col)
+            Board.play(board, row, selected_col, 2)
 
-            if so_won(board, 2):
+            if Board.so_won(board, 2):
                 print("AI wins. Death to humanity!")
                 over = True
 
-        print_right_way(board)
+        Board.print_right_way(board)
         print("============\n")
 
         turn ^= 1
