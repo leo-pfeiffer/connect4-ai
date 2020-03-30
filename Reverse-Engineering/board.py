@@ -68,7 +68,7 @@ class Board:
 
     def unmake_last_move(self):
         """
-        Presumably called if alpha-beta-pruning does not follow the move
+        Presumably called if connect4-pruning does not follow the move
         """
 
         maker = 0b1
