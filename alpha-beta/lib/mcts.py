@@ -2,18 +2,27 @@ import math
 import numpy as np
 import random
 import time
-from lib.main import Board
+from lib.players import Board, Human, AlphaBeta
 
 
 class MCTS:
 
-    def __init__(self, board, no):
+    def __init__(self, board, no, name):
+        self.name = name
         self.board = board
         self.no = no    # Is MCTS Player 1 or Player 2
         self.values = np.zeros((6, 7))
         self.N = 0  # number of visits from child node = # of turns per simulation
         self.cur_visits = np.zeros((6, 7), dtype=int)  # reset during every new selection.
         self.involved_nodes = []
+
+    def selector(self, board, depth, alpha, beta, maximising_Player):
+        """
+        Function is only introduced to allow for standardised call across all Player Classes.
+        Needs to take all possible arguments, but only passes on the ones needed for the current player
+        """
+        selected_col = self.selection(board)
+        return selected_col
 
     def selection(self, board):
         self.board = board
@@ -117,48 +126,3 @@ class MCTS:
                 if board[r][c] == 0:
                     lcr.append(r)
         return lcr
-
-
-if __name__ == '__main__':
-
-    board = Board.build_board()
-    print(board)
-    print("============\n")
-
-    over = False
-    turn = 0
-
-    M = MCTS(board, no=2)
-
-    while not over:
-
-        # Human
-        if turn == 0:
-            selected_col = int(input("P1 choose (0-6):"))
-            if Board.legal_check(board, selected_col):
-                row = Board.where_it_lands(board, selected_col)
-                Board.play(board, row, selected_col, 1)
-
-                if Board.so_won(board, 1):
-                    print("Human wins. Congratulations, John Henry.")
-                    over = True
-            # If illegal column is selected, ask the user again. => Outsourcing in function necessary
-            else:
-                print("Selected illegal column. Idiot! Your intelligence is artificial. GAME OVER!")
-                break
-
-        # AI
-        else:
-            # get the best move
-            selected_col = M.selection(board=board)
-            row = Board.where_it_lands(board, selected_col)
-            Board.play(board, row, selected_col, 2)
-
-            if Board.so_won(board, 2):
-                print("AI wins. Death to humanity!")
-                over = True
-
-        Board.print_right_way(board)
-        print("============\n")
-
-        turn ^= 1
