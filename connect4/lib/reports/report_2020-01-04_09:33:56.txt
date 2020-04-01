@@ -1,0 +1,17 @@
+============================================
+Game report
+2020-01-04 09:33:56
+Alphabeta1 vs Alphabeta2
+Number of games: 10
+============================================
+       Winner Cum_Wins Cum_Wins_%   Runtime
+0  Alphabeta2        1          1   0.31835
+1  Alphabeta2        2          1  0.302248
+2  Alphabeta2        3          1  0.301707
+3  Alphabeta2        4          1  0.305137
+4  Alphabeta2        5          1  0.306881
+5  Alphabeta2        6          1  0.300695
+6  Alphabeta2        7          1  0.301484
+7  Alphabeta2        8          1  0.306214
+8  Alphabeta2        9          1  0.307811
+9  Alphabeta2       10          1  0.301596
