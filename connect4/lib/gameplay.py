@@ -1,23 +1,13 @@
 import math
 from lib.board import Board
-from lib.players import AlphaBeta, MCTS, Human
+from lib.players import Human, AlphaBeta, MCTS
 
-if __name__ == '__main__':
 
-    board = Board.build_board()
+def play_game(players, board):
     print(board)
     print("============\n")
 
     turn = 0
-
-    H1 = Human(board, no=1, name='John Henry')
-    H2 = Human(board, no=1, name='Django')
-    AB1 = AlphaBeta(board, no=1, name='Alphabeta1')
-    AB2 = AlphaBeta(board, no=2, name='Alphabeta2')
-    M1 = MCTS(board, no=1, name='MCTS1')
-    M2 = MCTS(board, no=1, name='MCTS2')
-
-    players = [AB1, M1]
 
     while not Board.so_won(board, players[turn ^ 1].no) and len(Board.valid_locations(board)) > 0:
 
@@ -35,5 +25,24 @@ if __name__ == '__main__':
 
     if Board.so_won(board, players[turn ^ 1].no):
         print("VICTORY FOR " + players[turn ^ 1].name)
+        return players[turn ^ 1].name
     else:
         print("DRAW")
+        return 'DRAW'
+
+
+if __name__ == '__main__':
+    board = Board.build_board()
+
+    H1 = Human(board, no=1, name='John Henry')
+    H2 = Human(board, no=1, name='Elham')
+
+    AB1 = AlphaBeta(board, no=2, name='Alphabeta1')
+    AB2 = AlphaBeta(board, no=2, name='Alphabeta2')
+
+    M1 = MCTS(board, no=2, name='MCTS1')
+    M2 = MCTS(board, no=1, name='MCTS2')
+
+    players = [H2, AB1]
+
+    play_game(players, board)       # do this to play game

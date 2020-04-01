@@ -1,6 +1,7 @@
 import numpy as np
 import time
 
+ 
 class GameTree:
 
     def __init__(self, **kwargs):
