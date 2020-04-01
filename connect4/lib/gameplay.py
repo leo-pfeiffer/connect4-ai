@@ -4,22 +4,27 @@ from lib.players import Human, AlphaBeta, MCTS
 
 
 def play_game(players, board):
-    print(board)
-    print("============\n")
+
+    should_print = __name__ == '__main__'
+
+    if should_print:
+        print(board)
+        print("============\n")
 
     turn = 0
 
     while not Board.so_won(board, players[turn ^ 1].no) and len(Board.valid_locations(board)) > 0:
-
-        print("{}:".format(players[turn].name))
+        if should_print:
+            print("{}:".format(players[turn].name))
         selected_col = players[turn].selector(board, 3, -math.inf, math.inf, True)
 
         if Board.legal_check(board, selected_col):
             row = Board.where_it_lands(board, selected_col)
             Board.play(board, row, selected_col, players[turn].no)
 
-        Board.print_right_way(board)
-        print("============\n")
+        if should_print:
+            Board.print_right_way(board)
+            print("============\n")
 
         turn ^= 1
 
