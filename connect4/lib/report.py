@@ -58,7 +58,7 @@ def run_test(players, num_sim):
 
     timestamp = datetime.datetime.strftime(datetime.datetime.now(), format='%Y-%d-%m_%H:%M:%S')
 
-    text_file = open("reports/report_{}.txt".format(timestamp), "w")
+    text_file = open("report_{}.txt".format(timestamp), "w")
     text_file.write(report_string)
     text_file.close()
     int(0)
