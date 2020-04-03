@@ -55,6 +55,7 @@ def run_test(players, num_sim):
         report_df.iloc[i] = [winner, cum_wins, cum_wins_p, runtime]
 
     report_string = reporter(players, num_sim, report_df)
+    print("Average runtime on {} runs: {}".format(num_sim, report_df.Runtime.mean()))
 
     timestamp = datetime.datetime.strftime(datetime.datetime.now(), format='%Y-%d-%m_%H:%M:%S')
 
