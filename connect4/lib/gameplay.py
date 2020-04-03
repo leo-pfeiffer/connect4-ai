@@ -16,7 +16,7 @@ def play_game(players, board):
     while not Board.so_won(board, players[turn ^ 1].no) and len(Board.valid_locations(board)) > 0:
         if should_print:
             print("{}:".format(players[turn].name))
-        selected_col = players[turn].selector(board, 3, -math.inf, math.inf, True)
+        selected_col = players[turn].selector(board, -math.inf, math.inf, True)
 
         if Board.legal_check(board, selected_col):
             row = Board.where_it_lands(board, selected_col)
@@ -42,12 +42,12 @@ if __name__ == '__main__':
     H1 = Human(board, no=1, name='John Henry')
     H2 = Human(board, no=1, name='Elham')
 
-    AB1 = AlphaBeta(board, no=2, name='Alphabeta1')
-    AB2 = AlphaBeta(board, no=2, name='Alphabeta2')
+    AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=3)
+    AB2 = AlphaBeta(board, no=2, name='Alphabeta2', depth=3)
 
-    M1 = MCTS(board, no=2, name='MCTS1')
-    M2 = MCTS(board, no=1, name='MCTS2')
+    M1 = MCTS(board, no=1, name='MCTS1')
+    M2 = MCTS(board, no=2, name='MCTS2')
 
-    players = [H2, AB1]
+    players = [AB1, AB2]
 
     play_game(players, board)       # do this to play game

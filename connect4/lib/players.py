@@ -7,17 +7,18 @@ from lib.board import Board
 
 class AlphaBeta:
 
-    def __init__(self, board, no, name):
+    def __init__(self, board, no, name, depth):
         self.name = name
         self.board = board
         self.no = no  # Is AlphaBeta Player 1 or Player 2
+        self.depth = depth
 
-    def selector(self, board, depth, alpha, beta, maximising_Player):
+    def selector(self, board, alpha, beta, maximising_Player):
         """
         Function is only introduced to allow for standardised call across all Player Classes.
         Needs to take all possible arguments, but only passes on the ones needed for the current player
         """
-        selected_col, minimax_score = self.minimax(board, depth, alpha, beta, maximising_Player)
+        selected_col, minimax_score = self.minimax(board, self.depth, alpha, beta, maximising_Player)
         return selected_col
 
     def minimax(self, board, depth, alpha, beta, maximising_Player):
@@ -168,7 +169,7 @@ class MCTS:
         self.cur_visits = np.zeros((6, 7), dtype=int)  # reset during every new selection.
         self.involved_nodes = []
 
-    def selector(self, board, depth, alpha, beta, maximising_Player):
+    def selector(self, board, alpha, beta, maximising_Player):
         """
         Function is only introduced to allow for standardised call across all Player Classes.
         Needs to take all possible arguments, but only passes on the ones needed for the current player
@@ -287,7 +288,7 @@ class Human:
         self.board = board
         self.no = no
 
-    def selector(self, board, depth, alpha, beta, maximising_Player):
+    def selector(self, board, alpha, beta, maximising_Player):
         """
         Function is only introduced to allow for standardised call across all Player Classes.
         Needs to take all possible arguments, but only passes on the ones needed for the current player
