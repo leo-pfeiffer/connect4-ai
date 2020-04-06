@@ -179,22 +179,38 @@ class MCTS:
 
     def selection(self, board):
         self.board = board
-        self.cur_visits = np.zeros((6, 7), dtype=int)  # n_j
 
         legal_cols = Board.valid_locations(board)
-        leg_mov_rows = self.legal_cols_row(self.board, legal_cols)
-        legal_pos = [(r, c) for r, c in zip(leg_mov_rows, legal_cols)]
+        leg_rows = [Board.where_it_lands(self.board, x) for x in legal_cols]
+        legal_pos = [(r, c) for r, c in zip(leg_rows, legal_cols)]
 
-        # get UCT values for all legal_positions
-        uct_values = [self.uct_value(self.values[x[0]][x[1]], self.N, self.cur_visits[x[0]][x[1]]) for x in legal_pos]
+        startTime = time.time()
+        outtaTime = False
 
-        # select move with maximum uct value
-        select = legal_pos[np.argmax(uct_values)]
+        self.cur_visits = np.zeros((6, 7), dtype=int)  # n_j
 
-        self.expansion(child=select)
+        while not outtaTime:
+
+            self.board = board
+
+            # get UCT values for all legal_positions
+            uct_values = [self.uct_value(self.values[x[0]][x[1]], self.N, self.cur_visits[x[0]][x[1]]) for x in legal_pos]
+
+            # select move with maximum uct value
+            select = legal_pos[np.argmax(uct_values)]
+            self.expansion(child=select)
+
+            playTime = time.time() - startTime
+            outtaTime = (playTime > 3)
+
+        self.cur_visits = np.zeros((6, 7), dtype=int)
+        self.N = 0
 
         # now that we have an updated value matrix, select most promising action
+        # leg_mov_values = Estimated game theoretic value
         leg_mov_values = [self.values[x[0]][x[1]] for x in legal_pos]
+        #print(np.round(leg_mov_values, 2))
+
         best_move = legal_cols[np.argmax(leg_mov_values)]
 
         return best_move
@@ -215,58 +231,47 @@ class MCTS:
             self.simulation(child)
 
     def simulation(self, child):
-        print("AI is thinking... give it a second.\n============")
-        startTime = time.time()
-        outtaTime = False
 
-        while not outtaTime:
-            simu_board = self.board.copy()
-            Board.play(simu_board, child[0], child[1], self.no)
+        simu_board = self.board.copy()
+        Board.play(simu_board, child[0], child[1], self.no)
 
-            over = False
-            turn = 0
+        self.cur_visits[child[0]][child[1]] += 1
+        self.N += 1
+        self.involved_nodes.append((child[0], child[1]))
 
-            while not over:
+        over = False
+        turn = 0
 
-                # Turn changes from 0 to 1 in each iteration. AI = 1, Human = 0.
-                # Human behaves very stupid and chooses randomly.
-                try:
-                    selected_col = random.choice(Board.valid_locations(simu_board))
-                # if no valid_locations left but no winner => DRAW. Backpropagate 0.5
-                except IndexError:
-                    self.backpropagation(result=0.5)
-                    break
-                row = Board.where_it_lands(simu_board, selected_col)
+        while not over:
 
-                if turn == 1:
-                    self.cur_visits[row][selected_col] += 1  # update n of simulated nodes
-                    self.N += 1  # update N of child_node
-                    self.involved_nodes.append((row, selected_col))
+            # Turn changes from 0 to 1 in each iteration. AI = 1, Human = 0.
+            # Human behaves very stupid and chooses randomly.
+            try:
+                selected_col = random.choice(Board.valid_locations(simu_board))
+            # if no valid_locations left but no winner => DRAW. Backpropagate 0.5
+            except IndexError:
+                self.backpropagation(result=0.5)
+                break
+            row = Board.where_it_lands(simu_board, selected_col)
 
-                Board.play(simu_board, row, selected_col, turn + 1)
+            if turn == 1:
+                self.cur_visits[row][selected_col] += 1  # update n of simulated nodes
+                self.N += 1  # update N of child_node
+                self.involved_nodes.append((row, selected_col))
 
-                if Board.so_won(simu_board, turn + 1):
-                    # backpropagate result from perspective of AI: 1 if win, 0 if loss
-                    self.backpropagation(result=turn)
+            Board.play(simu_board, row, selected_col, turn + 1)
 
-                    # if turn == 1:
-                    #     self.backpropagation(result=1)
-                    # else:
-                    #     self.backpropagation(result=-60)
-                    over = True
+            if Board.so_won(simu_board, turn + 1):
+                # backpropagate result from perspective of AI: 1 if win, 0 if loss
+                self.backpropagation(result=turn)
+                over = True
 
-                turn ^= 1
-
-            playTime = time.time() - startTime
-            outtaTime = (playTime > 3)  # stop simulating after 3 seconds
+            turn ^= 1
 
     def backpropagation(self, result):
         for node in self.involved_nodes:
             self.values[node[0]][node[1]] = (self.values[node[0]][node[1]] * (self.N - 1) + result) / self.N
-
         self.involved_nodes.clear()
-        self.cur_visits = np.zeros((6, 7), dtype=int)
-        self.N = 0
 
     @staticmethod
     def uct_value(x, N, n):
@@ -277,13 +282,13 @@ class MCTS:
             return x + 2 * c * math.sqrt((2 * math.log(N)) / n)
 
     @staticmethod
-    def legal_cols_row(board, legal_cols):
-        lcr = []
-        for r in range(5, -1, -1):
+    def legal_mov_row(board, legal_cols):
+        lmr = []
+        for r in range(6):
             for c in legal_cols:
                 if board[r][c] == 0:
-                    lcr.append(r)
-        return lcr
+                    lmr.append(r)
+        return lmr
 
 
 class Human:

@@ -42,12 +42,12 @@ if __name__ == '__main__':
     H1 = Human(board, no=1, name='Leo')
     H2 = Human(board, no=1, name='Elham')
 
-    AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=3)
+    AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=1)
     AB2 = AlphaBeta(board, no=2, name='Alphabeta2', depth=3)
 
     M1 = MCTS(board, no=1, name='MCTS1')
     M2 = MCTS(board, no=2, name='MCTS2')
 
-    players = [M1, M2]
+    players = [H1, M2]
 
     play_game(players, board)       # do this to play game

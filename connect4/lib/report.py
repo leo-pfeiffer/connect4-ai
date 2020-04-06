@@ -74,10 +74,10 @@ if __name__ == '__main__':
     AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=1)
     AB2 = AlphaBeta(board, no=2, name='Alphabeta2', depth=1)
 
-    M1 = MCTS(board, no=2, name='MCTS1')
-    M2 = MCTS(board, no=1, name='MCTS2')
+    M1 = MCTS(board, no=1, name='MCTS1')
+    M2 = MCTS(board, no=2, name='MCTS2')
 
-    players = [M2, M1]
+    players = [AB1, M2]
 
     run_test(players, num_sim=10, save_to_file=False)
     int(0)
