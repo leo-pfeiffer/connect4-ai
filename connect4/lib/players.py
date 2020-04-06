@@ -164,7 +164,7 @@ class MCTS:
         self.name = name
         self.board = board
         self.no = no  # Is MCTS Player 1 or Player 2
-        self.values = np.zeros((6, 7))
+        self.values = np.zeros((6, 7))  # holds the average of all returns so far
         self.N = 0  # number of visits from child node = # of turns per simulation
         self.cur_visits = np.zeros((6, 7), dtype=int)  # reset during every new selection.
         self.involved_nodes = []
@@ -248,6 +248,11 @@ class MCTS:
                 if Board.so_won(simu_board, turn + 1):
                     # backpropagate result from perspective of AI: 1 if win, 0 if loss
                     self.backpropagation(result=turn)
+
+                    # if turn == 1:
+                    #     self.backpropagation(result=1)
+                    # else:
+                    #     self.backpropagation(result=-60)
                     over = True
 
                 turn ^= 1

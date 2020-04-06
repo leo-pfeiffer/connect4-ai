@@ -39,7 +39,7 @@ def play_game(players, board):
 if __name__ == '__main__':
     board = Board.build_board()
 
-    H1 = Human(board, no=1, name='John Henry')
+    H1 = Human(board, no=1, name='Leo')
     H2 = Human(board, no=1, name='Elham')
 
     AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=3)
@@ -48,6 +48,6 @@ if __name__ == '__main__':
     M1 = MCTS(board, no=1, name='MCTS1')
     M2 = MCTS(board, no=2, name='MCTS2')
 
-    players = [AB1, AB2]
+    players = [M1, M2]
 
     play_game(players, board)       # do this to play game

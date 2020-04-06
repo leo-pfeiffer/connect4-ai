@@ -12,20 +12,19 @@ def reporter(players, num_sim, report_df):
     Columns: No of game, Winner, No of cummulative wins, cummulative share of wins, runtime of game
     """
 
-    h = "Game report"
-    t = datetime.datetime.strftime(datetime.datetime.now(), format='%Y-%d-%m %H:%M:%S')
-    o = players[0].name + " vs " + players[1].name
-    g = "Number of games: " + str(num_sim)
+    h = "Game report\n"
+    t = datetime.datetime.strftime(datetime.datetime.now(), format='%Y-%d-%m %H:%M:%S') + "\n"
+    o = players[0].name + " vs " + players[1].name + "\n"
+    g = "Number of games: " + str(num_sim) + "\n"
+    a = "Average runtime: " + str(report_df.Runtime.mean()) + "\n"
     line_sep = "============================================\n"
 
-    report_string = line_sep + h + "\n" + t + "\n" + o + "\n" + g + "\n" + line_sep + report_df.to_string()
+    report_string = line_sep + h + t + o + g + a + line_sep + report_df.to_string()
 
     return report_string
 
 
-
-def run_test(players, num_sim):
-
+def run_test(players, num_sim, save_to_file):
     report_df = pd.DataFrame(columns=['Winner', 'Cum_Wins', 'Cum_Wins_S', 'Runtime'], index=[*range(num_sim)])
 
     wins_p1 = 0
@@ -55,14 +54,15 @@ def run_test(players, num_sim):
         report_df.iloc[i] = [winner, cum_wins, cum_wins_p, runtime]
 
     report_string = reporter(players, num_sim, report_df)
-    print("Average runtime on {} runs: {}".format(num_sim, report_df.Runtime.mean()))
 
     timestamp = datetime.datetime.strftime(datetime.datetime.now(), format='%Y-%d-%m_%H:%M:%S')
 
-    text_file = open("report_{}.txt".format(timestamp), "w")
-    text_file.write(report_string)
-    text_file.close()
-    int(0)
+    if save_to_file:
+        text_file = open("report_{}.txt".format(timestamp), "w")
+        text_file.write(report_string)
+        text_file.close()
+
+    print(report_string)
 
 
 if __name__ == '__main__':
@@ -71,13 +71,13 @@ if __name__ == '__main__':
     H1 = Human(board, no=1, name='John Henry')
     H2 = Human(board, no=1, name='Elham')
 
-    AB1 = AlphaBeta(board, no=2, name='Alphabeta1')
-    AB2 = AlphaBeta(board, no=2, name='Alphabeta2')
+    AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=1)
+    AB2 = AlphaBeta(board, no=2, name='Alphabeta2', depth=1)
 
-    M1 = MCTS(board, no=1, name='MCTS1')
-    M2 = MCTS(board, no=2, name='MCTS2')
+    M1 = MCTS(board, no=2, name='MCTS1')
+    M2 = MCTS(board, no=1, name='MCTS2')
 
-    players = [M1, M2]
+    players = [M2, M1]
 
-    run_test(players, num_sim=10)
+    run_test(players, num_sim=10, save_to_file=False)
     int(0)
