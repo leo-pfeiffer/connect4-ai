@@ -4,7 +4,7 @@
 }
 
 #game-board {
-	background: #0074B3;
+	background: #0018b3;
 	width: 730px;
 	cursor: pointer;
 }
@@ -14,11 +14,11 @@
 	display: inline-block;
 }
 
-.column:hover  circle.free{
-	fill: #D5E4ED;
+.column:hover  circle.empty{
+	fill: #d5e4ed;
 }
 
-circle.free {
+circle.empty {
 	fill: #fff;
 }
 
