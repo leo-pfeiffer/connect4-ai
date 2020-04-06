@@ -278,7 +278,7 @@ class MCTS:
         if n == 0:  # force exploration of unvisited nodes
             return np.inf
         else:
-            c = 1 / math.sqrt(2)  # fulfils Hoeffding-Inequality :P
+            c = 1 / math.sqrt(2)  # fulfils Hoeffding-Inequality: Optimal if reward in range [0, 1]
             return x + 2 * c * math.sqrt((2 * math.log(N)) / n)
 
     @staticmethod
