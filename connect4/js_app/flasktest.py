@@ -10,7 +10,7 @@ import numpy as np
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
 app.debug = True
-app._static_folder = os.path.abspath("templates/static/")
+#app._static_folder = os.path.abspath("templates/static/")
 
 @app.route('/', methods=['GET'])
 def index():
