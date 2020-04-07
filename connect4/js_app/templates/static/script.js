@@ -2,6 +2,32 @@
 
 	const ConnectFour = function () {
 
+		const getMoveFromAI = function () {
+			alert("Unleash the power of AI...?");
+
+			// POST
+			fetch('/ai-action', {
+
+				method: 'POST',
+
+				// JSON payload
+				body: JSON.stringify({
+					gameBoard
+				})
+			}).then(function (response) {
+				return response.text();
+			}).then(function (text) {
+
+				console.log(text);
+
+				// assign updated gameBoard
+				// gameBoard = json;
+				// console.log(gameBoard);
+				return text
+			}).then(markNextFree);
+
+		};
+
 		// check whether there are four connected pieces
 		const checkDirection = function (currentX, currentY, direction) {
 
@@ -73,6 +99,7 @@
 		const markNextFree = function (x) {
 			// x: x-value of clicked column
 			// get the next free position in the column or alert that column is full
+			console.log(typeof x)
 			let nextY;
 			nextY = false;
 
@@ -158,7 +185,7 @@
 			startAI = document.querySelector('button');
 
 			// add AI getter
-			startAI.addEventListener('click', function(){alert("HEUREKA")});
+			startAI.addEventListener('click', getMoveFromAI);
 
 		};
 
