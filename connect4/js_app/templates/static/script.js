@@ -61,7 +61,7 @@
 					gameBoard[x][y] = 'free';
 				}
 
-				console.log(gameBoard);
+				// console.log(gameBoard);
 			}
 
 			// reset turns
@@ -99,6 +99,7 @@
 			// check if game is over
 			if (isWinner(parseInt(x), nextY)) {
 				alert(currentPlayer + ' wins!');
+				console.log(gameBoard);
 				clearBoard();
 				return true;
 			}
@@ -116,6 +117,12 @@
 
 		};
 
+		// check whether a coordinate is on the board
+		const onBoard = function (x, y) {
+			return (gameBoard.hasOwnProperty(x) && typeof gameBoard[x][y] !== 'undefined');
+
+		};
+
 		let gameBoard = {};
 		let currentPlayer = 'red';
 		let numRows = 6;
@@ -124,18 +131,7 @@
 
 		let _init = function () {
 
-			let columns;
-			// get all columns from html file
-			columns = document.querySelectorAll('.column');
-
-			// wait for click on a column. If click => Add new piece
-			// here: for one player, substitute EventListener with AI Selector
-			Array.prototype.forEach.call(columns, function (col) {
-				col.addEventListener('click', function () {
-					markNextFree(col.getAttribute('data-x'));
-				});
-			});
-
+			// initiate gameBoard with all positions free
 			for (let x = 0; x <= numRows; x++) {
 
 				gameBoard[x] = {};
@@ -144,13 +140,27 @@
 					gameBoard[x][y] = 'free';
 				}
 			}
-		};
 
-		// check whether a coordinate is on the board
-		const onBoard = function (x, y) {
-			return (gameBoard.hasOwnProperty(x) && typeof gameBoard[x][y] !== 'undefined');
-		};
+			let columns;
+			// get all columns from html file
+			columns = document.querySelectorAll('.column');
 
+			// add EventListener to all columns. Whenever new click => Add new piece
+			// here: for one player, substitute EventListener with AI Selector
+			Array.prototype.forEach.call(columns, function (col) {
+				col.addEventListener('click', function () {
+					markNextFree(col.getAttribute('data-x'));
+				});
+			});
+
+			let startAI;
+
+			startAI = document.querySelector('button');
+
+			// add AI getter
+			startAI.addEventListener('click', function(){alert("HEUREKA")});
+
+		};
 
 		_init();
 
@@ -159,4 +169,3 @@
 	ConnectFour();
 
 })();
-
