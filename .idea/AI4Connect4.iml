@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Reverse-Engineering" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/connect4" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/connect4/webapp/python-flask-with-javascript" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (finpro)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
