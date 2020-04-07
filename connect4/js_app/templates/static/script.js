@@ -3,27 +3,23 @@
 	const ConnectFour = function () {
 
 		const getMoveFromAI = function () {
-			alert("Unleash the power of AI...?");
 
 			// POST
 			fetch('/ai-action', {
 
 				method: 'POST',
 
-				// JSON payload
+				// JSON payload: pass gameBoard to Flask
 				body: JSON.stringify({
 					gameBoard
 				})
 			}).then(function (response) {
 				return response.text();
-			}).then(function (text) {
 
-				console.log(text);
+			}).then(function (col) {
+				console.log('AI played column ' + col);
+				return col;
 
-				// assign updated gameBoard
-				// gameBoard = json;
-				// console.log(gameBoard);
-				return text
 			}).then(markNextFree);
 
 		};
@@ -184,7 +180,7 @@
 
 			startAI = document.querySelector('button');
 
-			// add AI getter
+			// when AI button is clicked, get move from AI
 			startAI.addEventListener('click', getMoveFromAI);
 
 		};

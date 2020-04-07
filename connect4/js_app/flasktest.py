@@ -1,15 +1,11 @@
 from __future__ import print_function
 
 import math
-from flask import Flask, render_template, make_response
-from flask import redirect, request, jsonify, url_for
+from flask import Flask, render_template, request
 
-import io
 import os
-import uuid
 import numpy as np
 
-from lib.board import Board
 from lib.players import AlphaBeta
 
 app = Flask(__name__)
@@ -31,7 +27,7 @@ def ai_action():
         print('Incoming..')
         gameBoard = request.get_json(force=True)['gameBoard']
         print(gameBoard)  # parse as JSON
-        x = gameBoard_to_matrix(gameBoard)
+        x = call_Alphabeta(gameBoard)
 
         # return jsonify(x), 200
         return str(x), 200
@@ -46,25 +42,20 @@ def gameBoard_to_matrix(gameBoard):
 
     gameBoardMatrix = np.array(gameBoard).T[:-2]
 
-    x = call_AI(gameBoardMatrix)
-
-    return x
+    return gameBoardMatrix
 
 
-def call_AI(board):
+def call_Alphabeta(gameBoard):
+    board = gameBoard_to_matrix(gameBoard)
     AB = AlphaBeta(board=board, no=2, name='AlphaBeta', depth=2)
     selected_col = AB.selector(board, -math.inf, math.inf, True)
-    print(selected_col)
     return selected_col
-
-    if Board.legal_check(board, selected_col):
-        row = Board.where_it_lands(board, selected_col)
-        Board.play(board, row, selected_col, piece=2)
-
-    return matrix_to_gameBoard(board)
 
 
 def matrix_to_gameBoard(gameBoardMatrix):
+    """
+    Not currently needed, but maybe later.
+    """
     gameBoardMatrix = np.array(gameBoardMatrix).T
     gameBoard = [x + [0, 0] for x in gameBoardMatrix.tolist()]
     mapping = {0: 'free', 1: 'red', 2: 'yellow'}
@@ -75,4 +66,4 @@ def matrix_to_gameBoard(gameBoardMatrix):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5002)
