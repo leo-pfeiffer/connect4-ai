@@ -6,7 +6,7 @@ from flask import Flask, render_template, request
 import os
 import numpy as np
 
-from lib.players import AlphaBeta
+from lib.players import AlphaBeta, MCTS
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -25,9 +25,12 @@ def ai_action():
     # POST request
     if request.method == 'POST':
         print('Incoming..')
-        gameBoard = request.get_json(force=True)['gameBoard']
-        print(gameBoard)  # parse as JSON
-        x = call_Alphabeta(gameBoard)
+        data = request.get_json(force=True)
+        gameBoard = data['list'][0]
+        ai = data['list'][1]
+        print(gameBoard)
+        print(ai)
+        x = call_AI(gameBoard, ai)
 
         # return jsonify(x), 200
         return str(x), 200
@@ -45,10 +48,14 @@ def gameBoard_to_matrix(gameBoard):
     return gameBoardMatrix
 
 
-def call_Alphabeta(gameBoard):
+def call_AI(gameBoard, ai):
     board = gameBoard_to_matrix(gameBoard)
-    AB = AlphaBeta(board=board, no=2, name='AlphaBeta', depth=2)
-    selected_col = AB.selector(board, -math.inf, math.inf, True)
+    if ai == 'AlphaBeta':
+        AB = AlphaBeta(board=board, no=2, name='AlphaBeta', depth=2)
+        selected_col = AB.selector(board, -math.inf, math.inf, True)
+    elif ai == 'MCTS':
+        M = MCTS(board=board, no=2, name='MCTS')
+        selected_col = M.selector(board, -math.inf, math.inf, True)
     return selected_col
 
 
@@ -66,4 +73,4 @@ def matrix_to_gameBoard(gameBoardMatrix):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=5010)

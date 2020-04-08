@@ -2,7 +2,25 @@
 
 	const ConnectFour = function () {
 
+		const getOpponent = function() {
+			const ele = document.getElementsByName('opponent');
+
+			for(let i = 0; i < ele.length; i++) {
+				if(ele[i].checked){
+					opponent = ele[i].value;
+					alert(ele[i].value + ' selected.');
+				}
+			}
+        };
+
 		const getMoveFromAI = function () {
+
+			if (opponent === 'Human'){
+				return 0;
+			}
+
+			let dataToSend = [gameBoard, opponent];
+			dataToSend = JSON.stringify({ 'list': dataToSend });
 
 			// POST
 			fetch('/ai-action', {
@@ -10,9 +28,7 @@
 				method: 'POST',
 
 				// JSON payload: pass gameBoard to Flask
-				body: JSON.stringify({
-					gameBoard
-				})
+				body: dataToSend
 			}).then(function (response) {
 				return response.text();
 
@@ -138,6 +154,10 @@
 			// change player color
 			currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
 
+			if (currentPlayer === 'yellow'){
+				getMoveFromAI()
+			}
+
 		};
 
 		// check whether a coordinate is on the board
@@ -151,8 +171,11 @@
 		let numRows = 6;
 		let numCols = 7;
 		let numTurns = 0;
+		let opponent = 'AlphaBeta';
 
 		let _init = function () {
+
+			alert("You are playing as 'red'.\nSelect you opponent below.")
 
 			// initiate gameBoard with all positions free
 			for (let x = 0; x <= numRows; x++) {
@@ -182,6 +205,11 @@
 
 			// when AI button is clicked, get move from AI
 			startAI.addEventListener('click', getMoveFromAI);
+
+			let opponentSelect;
+
+			opponentSelect = document.querySelectorAll('button')[1];
+			opponentSelect.addEventListener('click', getOpponent);
 
 		};
 
