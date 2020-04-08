@@ -16,7 +16,7 @@
 		const getMoveFromAI = function () {
 
 			if (opponent === 'Human'){
-				return 0;
+				return;
 			}
 
 			let dataToSend = [gameBoard, opponent];
@@ -154,7 +154,7 @@
 			// change player color
 			currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
 
-			if (currentPlayer === 'yellow'){
+			if (currentPlayer === 'yellow' && opponent !== 'Human'){
 				getMoveFromAI()
 			}
 
@@ -171,7 +171,7 @@
 		let numRows = 6;
 		let numCols = 7;
 		let numTurns = 0;
-		let opponent = 'AlphaBeta';
+		let opponent = 'Human';
 
 		let _init = function () {
 
@@ -199,16 +199,9 @@
 				});
 			});
 
-			let startAI;
-
-			startAI = document.querySelector('button');
-
-			// when AI button is clicked, get move from AI
-			startAI.addEventListener('click', getMoveFromAI);
-
 			let opponentSelect;
 
-			opponentSelect = document.querySelectorAll('button')[1];
+			opponentSelect = document.querySelector('button');
 			opponentSelect.addEventListener('click', getOpponent);
 
 		};
