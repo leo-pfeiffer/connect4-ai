@@ -50,7 +50,8 @@
 			directions = {
 				horizontal: [[0, -1], [0, 1]],
 				vertical: [[-1, 0], [1, 0]],
-				diagonal: [[-1, -1], [1, 1], [-1, 1], [1, -1]]
+				diagonal_up: [[-1, -1], [1, 1]],
+				diagonal_down: [[-1, 1], [1, -1]],
 			};
 
 			chainLength = 1;
@@ -64,6 +65,7 @@
 					(gameBoard[currentX + (coords[0] * i)][currentY + (coords[1] * i)] === currentPlayer)
 					) {
 					chainLength = chainLength + 1;
+					console.log(direction, currentX, currentY, currentX + (coords[0] * i), currentY + (coords[1] * i));
 					i = i + 1;
 				}
 
@@ -76,8 +78,9 @@
 		// check whether current player wins. return true if so.
 		const isWinner = function (currentX, currentY) {
 			return checkDirection(currentX, currentY, 'vertical') ||
-				checkDirection(currentX, currentY, 'diagonal') ||
-				checkDirection(currentX, currentY, 'horizontal');
+				checkDirection(currentX, currentY, 'horizontal') ||
+				checkDirection(currentX, currentY, 'diagonal_up') ||
+				checkDirection(currentX, currentY, 'diagonal_down');
 		};
 
 		// clearBoard after end of game
@@ -98,8 +101,6 @@
 				for (let y = 0; y <= numCols; y++) {
 					gameBoard[x][y] = 'free';
 				}
-
-				// console.log(gameBoard);
 			}
 
 			// reset turns
@@ -111,7 +112,6 @@
 		const markNextFree = function (x) {
 			// x: x-value of clicked column
 			// get the next free position in the column or alert that column is full
-			console.log(typeof x)
 			let nextY;
 			nextY = false;
 
@@ -154,6 +154,7 @@
 			// change player color
 			currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
 
+			// automatically get next move from AI unless opponent == human
 			if (currentPlayer === 'yellow' && opponent !== 'Human'){
 				getMoveFromAI()
 			}

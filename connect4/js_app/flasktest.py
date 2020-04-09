@@ -24,12 +24,9 @@ def ai_action():
 
     # POST request
     if request.method == 'POST':
-        print('Incoming..')
         data = request.get_json(force=True)
         gameBoard = data['list'][0]
         ai = data['list'][1]
-        print(gameBoard)
-        print(ai)
         x = call_AI(gameBoard, ai)
 
         # return jsonify(x), 200
