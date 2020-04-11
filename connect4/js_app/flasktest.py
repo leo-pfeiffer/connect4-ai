@@ -5,6 +5,7 @@ from flask import Flask, render_template, request
 
 import os
 import numpy as np
+import webbrowser
 
 from lib.players import AlphaBeta, MCTS
 
@@ -12,6 +13,7 @@ app = Flask(__name__)
 app.secret_key = 's3cr3t'
 app.debug = True
 app._static_folder = os.path.abspath("templates/static/")
+webbrowser.open('http://0.0.0.0:5010/')
 
 @app.route('/', methods=['GET'])
 def index():
