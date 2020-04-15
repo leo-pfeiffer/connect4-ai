@@ -88,7 +88,7 @@
 
 			// reset attributes
 			Array.prototype.forEach.call(document.querySelectorAll('circle'), function (piece) {
-				piece.setAttribute('class', 'free');
+				piece.setAttribute('class', 'empty');
 			});
 
 			// reset gameBoard
