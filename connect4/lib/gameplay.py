@@ -16,6 +16,7 @@ def play_game(players, board):
     while not Board.so_won(board, players[turn ^ 1].no) and len(Board.valid_locations(board)) > 0:
         if should_print:
             print("{}:".format(players[turn].name))
+
         selected_col = players[turn].selector(board, -math.inf, math.inf, True)
 
         if Board.legal_check(board, selected_col):
@@ -48,6 +49,6 @@ if __name__ == '__main__':
     M1 = MCTS(board, no=1, name='MCTS1')
     M2 = MCTS(board, no=2, name='MCTS2')
 
-    players = [H1, M2]
+    players = [M1, M2]
 
     play_game(players, board)       # do this to play game

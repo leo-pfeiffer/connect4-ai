@@ -29,13 +29,13 @@ class AlphaBeta:
         if depth == 0 or is_terminal:
             if is_terminal:
                 if Board.so_won(board, self.no):
-                    return (None, 100000)  # immer zwei Einträge weil ich Platz für Speichern der Spalte brauche
+                    return None, 100000  # immer zwei Einträge weil ich Platz für Speichern der Spalte brauche
                 elif Board.so_won(board, 3 - self.no):
-                    return (None, -100000)
+                    return None, -100000
                 else:
-                    return (None, 0)
+                    return None, 0
             else:
-                return (None, self.value_function(board, self.no))
+                return None, self.value_function(board, self.no)
 
         if maximising_Player:
             score = -math.inf
@@ -201,7 +201,7 @@ class MCTS:
             self.expansion(child=select)
 
             playTime = time.time() - startTime
-            outtaTime = (playTime > 3)
+            outtaTime = (playTime > 1)
 
         self.cur_visits = np.zeros((6, 7), dtype=int)
         self.N = 0

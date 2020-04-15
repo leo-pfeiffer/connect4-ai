@@ -49,8 +49,20 @@ def gameBoard_to_matrix(gameBoard):
 
 def call_AI(gameBoard, ai):
     board = gameBoard_to_matrix(gameBoard)
-    if ai == 'AlphaBeta':
-        AB = AlphaBeta(board=board, no=2, name='AlphaBeta', depth=2)
+    if ai == 'AlphaBeta1':
+        AB = AlphaBeta(board=board, no=2, name='AlphaBeta1', depth=1)
+        selected_col = AB.selector(board, -math.inf, math.inf, True)
+    elif ai == 'AlphaBeta2':
+        AB = AlphaBeta(board=board, no=2, name='AlphaBeta2', depth=2)
+        selected_col = AB.selector(board, -math.inf, math.inf, True)
+    elif ai == 'AlphaBeta3':
+        AB = AlphaBeta(board=board, no=2, name='AlphaBeta3', depth=3)
+        selected_col = AB.selector(board, -math.inf, math.inf, True)
+    elif ai == 'AlphaBeta4':
+        AB = AlphaBeta(board=board, no=2, name='AlphaBeta3', depth=4)
+        selected_col = AB.selector(board, -math.inf, math.inf, True)
+    elif ai == 'AlphaBeta5':
+        AB = AlphaBeta(board=board, no=2, name='AlphaBeta3', depth=5)
         selected_col = AB.selector(board, -math.inf, math.inf, True)
     elif ai == 'MCTS':
         M = MCTS(board=board, no=2, name='MCTS')

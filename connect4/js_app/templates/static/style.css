@@ -1,12 +1,34 @@
 * {
 	border: 0;
 	padding: 0;
+	box-sizing: border-box;
 }
 
 #game-board {
 	background: #0018b3;
 	width: 730px;
 	cursor: pointer;
+}
+
+/* Create two unequal columns that floats next to each other */
+.textcolumn {
+  float: left;
+  padding: 10px;
+}
+
+.left {
+  width: 25%;
+}
+
+.right {
+  width: 75%;
+}
+
+/* Clear floats after the columns */
+.textrow:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .column {
@@ -33,3 +55,4 @@ circle.yellow {
 body {
 color: white;
 }
+

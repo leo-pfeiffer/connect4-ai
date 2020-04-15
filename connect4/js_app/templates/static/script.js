@@ -106,12 +106,24 @@
 			// reset turns
 			numTurns = 0;
 
+			// reset opponent selection
+			opponent = "None";
+
+			// reset Player
+			currentPlayer = 'red';
+
 			return gameBoard;
 
 		};
 		const markNextFree = function (x) {
 			// x: x-value of clicked column
 			// get the next free position in the column or alert that column is full
+
+			if (opponent === "None"){
+				alert("To start the game, select your opponent and click submit.")
+				return;
+			}
+
 			let nextY;
 			nextY = false;
 
@@ -138,7 +150,6 @@
 			// check if game is over
 			if (isWinner(parseInt(x), nextY)) {
 				alert(currentPlayer + ' wins!');
-				console.log(gameBoard);
 				clearBoard();
 				return true;
 			}
@@ -172,7 +183,7 @@
 		let numRows = 6;
 		let numCols = 7;
 		let numTurns = 0;
-		let opponent = 'Human';
+		let opponent = "None";
 
 		let _init = function () {
 
