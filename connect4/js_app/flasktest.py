@@ -17,7 +17,6 @@ webbrowser.open('http://0.0.0.0:5011/')
 
 @app.route('/', methods=['GET'])
 def index():
-    #title = 'Welcome to the Teisendorf-Challenge.\nCan you win against the AI?'
     return render_template('connect_html.html')
 
 

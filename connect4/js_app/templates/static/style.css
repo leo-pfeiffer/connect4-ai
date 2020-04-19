@@ -1,12 +1,35 @@
 * {
 	border: 0;
 	padding: 0;
+	margin: 0 auto;
 }
 
+body{
+	background: #3399ff;
+	color: white;
+	background-color: #2d2e30;
+}
+
+h2{
+	padding: 10px;
+}
+
+/*Header styling*/
+#header {
+	background: #0074D9;
+	width: 730px;
+	padding: 10px 10px 20px;
+	margin-top: 50px;
+}
+
+/*Game Board Styling*/
 #game-board {
 	background: #0074D9;
 	width: 730px;
 	cursor: pointer;
+	margin: 0 auto;
+	padding: 10px 10px 20px;
+	border: 4px solid black;
 }
 
 .column {
@@ -30,21 +53,18 @@ circle.yellow {
 	fill: #DAD400;
 }
 
-body {
-color: white;
-}
+/*Styling of Settings and Info Text*/
 
 #setts {
-		background: #0074D9;
-		width: 730px;
-        box-sizing: border-box;
+	background: #0074D9;
+	width: 730px;
+	padding: 10px 10px 20px;
 }
-    /* Set additional styling options for the columns */
+
 .column2 {
     float: left;
 }
 
-    /* Set width length for the left, right and middle columns */
 .settings {
     width: 200px;
 }
@@ -57,4 +77,92 @@ color: white;
     content: "";
     display: table;
     clear: both;
+}
+
+/*Radio Button Styling*/
+input[type="radio"]{
+	margin: 8px 0 8px;
+}
+
+label {
+	margin: 8px 0 8px;
+}
+
+
+/* Background animation: https://codepen.io/vaibhavarora/pen/xmpxjp*/
+.backgroundcircle{
+	position: absolute;
+	border-radius: 50%;
+	background: white;
+	animation: ripple 15s infinite;
+	box-shadow: 0px 0px 1px 0px #508fb9;
+	z-index: -1;
+}
+
+.small{
+	width: 200px;
+	height: 200px;
+	left: -100px;
+	bottom: -100px;
+}
+
+.medium{
+	width: 400px;
+	height: 400px;
+	left: -200px;
+	bottom: -200px;
+}
+
+.large{
+	width: 600px;
+	height: 600px;
+	left: -300px;
+	bottom: -300px;
+}
+
+.xlarge{
+	width: 800px;
+	height: 800px;
+	left: -400px;
+	bottom: -400px;
+}
+
+.xxlarge{
+	width: 1000px;
+	height: 1000px;
+	left: -500px;
+	bottom: -500px;
+}
+
+.shade1{
+	opacity: 0.2;
+}
+.shade2{
+	opacity: 0.5;
+}
+
+.shade3{
+	opacity: 0.7;
+}
+
+.shade4{
+	opacity: 0.8;
+}
+
+.shade5{
+	opacity: 0.9;
+}
+
+@keyframes ripple{
+  0%{
+	  transform: scale(0.8);
+  }
+
+  50%{
+	  transform: scale(2);
+  }
+
+  100%{
+	  transform: scale(0.8);
+  }
 }
