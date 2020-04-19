@@ -1,6 +1,6 @@
 (function() {
 
-	const ConnectFour = function () {
+	const ConnectFour = function() {
 
 		const getOpponent = function() {
 			const ele = document.getElementsByName('opponent');
@@ -187,7 +187,8 @@
 
 		let _init = function () {
 
-			alert("You are playing as 'red'.\nSelect you opponent below.")
+			const header = document.getElementById("header");
+			header.onanimationend = () => alert("You are playing as 'red'.\nSelect you opponent below.");
 
 			// initiate gameBoard with all positions free
 			for (let x = 0; x <= numRows; x++) {
