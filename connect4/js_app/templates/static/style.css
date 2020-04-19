@@ -34,3 +34,27 @@ body {
 color: white;
 }
 
+#setts {
+		background: #0074D9;
+		width: 730px;
+        box-sizing: border-box;
+}
+    /* Set additional styling options for the columns */
+.column2 {
+    float: left;
+}
+
+    /* Set width length for the left, right and middle columns */
+.settings {
+    width: 200px;
+}
+
+.info {
+    width: 530px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
