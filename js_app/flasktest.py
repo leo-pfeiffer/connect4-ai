@@ -14,7 +14,7 @@ app.secret_key = 's3cr3t'
 app.debug = True
 app._static_folder = os.path.abspath("templates/static/")
 host = '0.0.0.0'
-port = 5015
+port = 5019
 url = 'http://' + host + ':' + str(port) + '/'  # http://host:port/
 webbrowser.open(url)
 
