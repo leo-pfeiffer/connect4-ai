@@ -15,21 +15,21 @@ class AlphaBeta:
 
     def selector(self, board, alpha, beta, maximising_Player):
         """
-        Function is only introduced to allow for standardised call across all Player Classes.
+        Method is only introduced to allow for standardised call across all Player Classes.
         Needs to take all possible arguments, but only passes on the ones needed for the current player
         """
         selected_col, minimax_score = self.minimax(board, self.depth, alpha, beta, maximising_Player)
         return selected_col
 
     def minimax(self, board, depth, alpha, beta, maximising_Player):
-
+        """Method to perform alpha beta pruning"""
         valid_location = Board.valid_locations(board)
         is_terminal = Board.terminal_node(board)
 
         if depth == 0 or is_terminal:
             if is_terminal:
                 if Board.so_won(board, self.no):
-                    return None, 100000  # immer zwei Einträge weil ich Platz für Speichern der Spalte brauche
+                    return None, 100000  # always two values since I need space to save the column
                 elif Board.so_won(board, 3 - self.no):
                     return None, -100000
                 else:
@@ -81,9 +81,8 @@ class AlphaBeta:
 
             return column, score
 
-    # returns a value of an action
-    # values are abitrary....room for improvements?
     def value_function(self, board, piece):
+        """Returns the value of a given function"""
         score = 0
         opp_piece = 3 - piece
 
@@ -171,13 +170,15 @@ class MCTS:
 
     def selector(self, board, alpha, beta, maximising_Player):
         """
-        Function is only introduced to allow for standardised call across all Player Classes.
+        Method is only introduced to allow for standardised call across all Player Classes.
         Needs to take all possible arguments, but only passes on the ones needed for the current player
         """
         selected_col = self.selection(board)
         return selected_col
 
     def selection(self, board):
+        """Start the MCTS process by selecting the next leaf node. This is done for as long
+        as the specified budget (here: time) allows."""
         self.board = board
 
         legal_cols = Board.valid_locations(board)
@@ -209,13 +210,13 @@ class MCTS:
         # now that we have an updated value matrix, select most promising action
         # leg_mov_values = Estimated game theoretic value
         leg_mov_values = [self.values[x[0]][x[1]] for x in legal_pos]
-        #print(np.round(leg_mov_values, 2))
 
         best_move = legal_cols[np.argmax(leg_mov_values)]
 
         return best_move
 
     def expansion(self, child):
+        """Second step of MCTS: Expand tree from the selected node if possible"""
         temp_board = self.board.copy()
         Board.play(temp_board, child[0], child[1], self.no)
         if Board.terminal_node(temp_board):
@@ -231,7 +232,7 @@ class MCTS:
             self.simulation(child)
 
     def simulation(self, child):
-
+        """Third step of MCTS: Simulate game until the end"""
         simu_board = self.board.copy()
         Board.play(simu_board, child[0], child[1], self.no)
 
@@ -245,7 +246,7 @@ class MCTS:
         while not over:
 
             # Turn changes from 0 to 1 in each iteration. AI = 1, Human = 0.
-            # Human behaves very stupid and chooses randomly.
+            # Human chooses randomly.
             try:
                 selected_col = random.choice(Board.valid_locations(simu_board))
             # if no valid_locations left but no winner => DRAW. Backpropagate 0.5
@@ -269,6 +270,7 @@ class MCTS:
             turn ^= 1
 
     def backpropagation(self, result):
+        """Last step of MCTS: Update node values for all nodes that have been played"""
         for node in self.involved_nodes:
             self.values[node[0]][node[1]] = (self.values[node[0]][node[1]] * (self.N - 1) + result) / self.N
         self.involved_nodes.clear()
@@ -300,7 +302,7 @@ class Human:
 
     def selector(self, board, alpha, beta, maximising_Player):
         """
-        Function is only introduced to allow for standardised call across all Player Classes.
+        Method is only introduced to allow for standardised call across all Player Classes.
         Needs to take all possible arguments, but only passes on the ones needed for the current player
         """
         selected_col = int(input("P1 choose (0-6):"))

@@ -5,7 +5,7 @@ from lib.players import Human, AlphaBeta, MCTS
 
 def play_game(players, board):
 
-    should_print = __name__ == '__main__'
+    should_print = __name__ == '__main__'   # prevent printing when running reports
 
     if should_print:
         print(board)
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     board = Board.build_board()
 
     H1 = Human(board, no=1, name='Leo')
-    H2 = Human(board, no=1, name='Elham')
+    H2 = Human(board, no=2, name='Niko')
 
     AB1 = AlphaBeta(board, no=1, name='Alphabeta1', depth=1)
     AB2 = AlphaBeta(board, no=2, name='Alphabeta2', depth=3)
@@ -51,4 +51,4 @@ if __name__ == '__main__':
 
     players = [M1, M2]
 
-    play_game(players, board)       # do this to play game
+    play_game(players, board)

@@ -13,7 +13,11 @@ app = Flask(__name__)
 app.secret_key = 's3cr3t'
 app.debug = True
 app._static_folder = os.path.abspath("templates/static/")
-webbrowser.open('http://0.0.0.0:5011/')
+host = '0.0.0.0'
+port = 5015
+url = 'http://' + host + ':' + str(port) + '/'  # http://host:port/
+webbrowser.open(url)
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -22,7 +26,7 @@ def index():
 
 @app.route('/ai-action', methods=['GET', 'POST'])
 def ai_action():
-
+    """Get next action from the specified AI"""
     # POST request
     if request.method == 'POST':
         data = request.get_json(force=True)
@@ -30,11 +34,11 @@ def ai_action():
         ai = data['list'][1]
         x = call_AI(gameBoard, ai)
 
-        # return jsonify(x), 200
         return str(x), 200
 
 
 def gameBoard_to_matrix(gameBoard):
+    """Convert the JS gameBoard into a matrix to make it work with the AI implementation"""
     gameBoard = {int(k): v for k, v in gameBoard.items()}
     gameBoard = [list(v.values()) for v in gameBoard.values()]
 
@@ -47,6 +51,7 @@ def gameBoard_to_matrix(gameBoard):
 
 
 def call_AI(gameBoard, ai):
+    """Call the specified AI"""
     board = gameBoard_to_matrix(gameBoard)
     if ai == 'AlphaBeta1':
         AB = AlphaBeta(board=board, no=2, name='AlphaBeta1', depth=1)
@@ -69,18 +74,5 @@ def call_AI(gameBoard, ai):
     return selected_col
 
 
-def matrix_to_gameBoard(gameBoardMatrix):
-    """
-    Not currently needed, but maybe later.
-    """
-    gameBoardMatrix = np.array(gameBoardMatrix).T
-    gameBoard = [x + [0, 0] for x in gameBoardMatrix.tolist()]
-    mapping = {0: 'free', 1: 'red', 2: 'yellow'}
-    gameBoard = [[mapping[x] for x in col] for col in gameBoard]
-    gameBoard = {str(k1): {str(k2): v2 for k2, v2 in zip(range(9), v1)} for k1, v1 in zip(range(7), gameBoard)}
-
-    return gameBoard    # return this to GET request
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5011)
+    app.run(host=host, port=port)
