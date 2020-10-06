@@ -32,7 +32,7 @@ There are different ways to run the scripts and to play the game.
     you to the specified localhost page. Follow the instructions on the screen.
 3. Play online with GUI <br />
     We have published an online version of the game using pythonanwhere.com. 
-    You can play online on https://www.teisendorf.tech
+    You can play online on https://leopfeiffer.pythonanywhere.com/
 
   
 ###### 2.1 Setting up your players in gameplay.py
