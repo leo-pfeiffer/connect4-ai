@@ -65,7 +65,6 @@ pyparsing==2.4.7
 pytest==6.2.2
 pytest-cov==2.11.1
 python-dateutil==2.8.1
-python-dev-tools==2020.9.10
 pytz==2021.1
 pyupgrade==2.9.0
 PyYAML==5.4.1
