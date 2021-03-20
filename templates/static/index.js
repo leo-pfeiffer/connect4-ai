@@ -1,25 +1,17 @@
 window.onload = function() {
     makeVue();
-    makeHeaderVue();
+    makeGameBoardVue();
     makeGame();
-}
-
-const makeHeaderVue = function() {
-    const headerVue = new Vue({
-        el: "#unique-id",
-        data: {msg: "sflsd"},
-        methods: {
-            test: function() {
-                console.log('test test test')
-            }
-        }
-    })
 }
 
 const makeVue = function() {
     const vue = new Vue({
-        el: "#game-board",
-        data: {msg: "sflsd"},
+		delimiters: ["[[", "]]"],
+        el: "#setts",
+        data: {
+			msg: "sflsd",
+			myList: ['a', 'b', 'c', 'd', 'e']
+		},
         methods: {
             test: function() {
                 console.log('test test test')
@@ -28,9 +20,19 @@ const makeVue = function() {
     })
 }
 
+const makeGameBoardVue = function() {
+	const gameBoardVue = new Vue({
+		delimiters: ["[[", "]]"],
+		el: "#game-board",
+	})
+}
+
+
 const makeGame = function() {
 
 	const ConnectFour = function() {
+
+		console.log('game started')
 
 		const getOpponent = function() {
 			const ele = document.getElementsByName('opponent');
