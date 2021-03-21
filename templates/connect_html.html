@@ -8,11 +8,26 @@
 </head>
 <body>
 
-    <div id="header" class="center">
+    <div id="header" class="center boxed">
         <p class="title is-4">Welcome to the Teisendorf-Challenge.<br>Can you win against the AI?</p>
     </div>
 
-    <div id="game-board" class="center">
+    <div id="entry" class="center boxed" v-show="state === 'entry'">
+        <div class="card">
+            <div class="card-content">
+                <p><strong>Single Player</strong></p><br>
+                <button type="button" class="button is-small" id="start-game" v-on:click="startGame">Start game</button>
+            </div>
+            <div class="card-content">
+                <p><strong>Multi Player. </strong>You can either start a new game or join an existing game by its ID.</p><br>
+                <input id="game-id" name="game-id" class="input" placeholder="Game ID" v-model="gameId">
+                <button type="button" class="button is-small" id="join-game" v-on:click="joinGame">Join</button><br><br>
+                <button type="button" class="button is-small" id="create-game" v-on:click="createGame">Create new game</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-board" class="center boxed" v-show="state === 'play'">
         <div v-for="i in 7" class="column" :id="`column-${i-1}`" :data-x="`${i}`" v-on:click="clickColumn(i-1)">
             <svg v-for="j in 6" :class="`row-${6-j}`" height="70" width="70">
               <circle cx="35" cy="35" r="32" stroke="#0B4E72" stroke-width="2" class="empty" />
@@ -20,7 +35,7 @@
         </div>
     </div>
 
-    <div id="setts" class="center">
+    <div id="setts" class="center boxed" v-show="state === 'play'">
         <div class="card">
             <div class="card-content">
                 <p>Select opponent:</p><br>

@@ -10,12 +10,32 @@ window.onload = function() {
 
 const makeGame = function() {
 
+	const delimiters = ["[[", "]]"];
+
+	let game = Vue.observable({
+		state: "entry",
+		gameId: null,
+		mode: null,
+	})
+
 	let gameBoard = {};
 	let currentPlayer = 'red';
 	const numRows = 6;
 	const numCols = 7;
 	let numTurns = 0;
 	let opponent = "None";
+
+	const setState = function(newState) {
+		game.state = newState;
+	}
+
+	const setMultiPlayerMode = function() {
+		game.mode = 'multi';
+	}
+
+	const setSinglePlayerMode = function() {
+		game.mode = 'single';
+	}
 
 	const setupGameBoard = function () {
 		// initiate gameBoard with all positions free
@@ -169,12 +189,15 @@ const makeGame = function() {
 
 
 	const gameBoardVue = new Vue({
-		delimiters: ["[[", "]]"],
+		delimiters: delimiters,
 		el: "#game-board",
 		computed: {
 			currentPlayer() {
 				return currentPlayer;
 			},
+			state() {
+				return game.state;
+			}
 		},
 		methods: {
 			clickColumn: function(col) {
@@ -188,8 +211,51 @@ const makeGame = function() {
 	});
 
 
+	const entryVue = new Vue({
+		delimiters: delimiters,
+		el: "#entry",
+		data: {
+			gameIdProxy: null,
+		},
+		methods: {
+			updateGameIdProxy: function() {
+				this.gameIdProxy = globalGameId
+			},
+			joinGame: function() {
+				console.log('join game')
+				setState('play')
+				setMultiPlayerMode();
+			},
+			createGame: function() {
+				console.log('create game')
+				setState('play')
+				setMultiPlayerMode();
+			},
+			startGame: function() {
+				console.log('start game')
+				setState('play')
+				setSinglePlayerMode();
+			}
+		},
+		computed: {
+			gameId: {
+				get: function () {
+					return this.gameIdProxy;
+					},
+				set: function (newGameId) {
+					game.gameId = newGameId;
+					this.updateGameIdProxy();
+				}
+			},
+			state() {
+				return game.state;
+			}
+		},
+	})
+
+
 	const settingsVue = new Vue({
-		delimiters: ["[[", "]]"],
+		delimiters: delimiters,
 		el: "#setts",
 		data: {
 			opponentProxy: null
@@ -209,6 +275,9 @@ const makeGame = function() {
 					this.updateOpponentProxy();
 				}
 			},
+			state() {
+				return game.state;
+			}
 		},
 		created() {
 			this.updateOpponentProxy();
