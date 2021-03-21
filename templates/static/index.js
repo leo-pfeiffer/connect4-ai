@@ -10,25 +10,17 @@ window.onload = function() {
 
 const makeGame = function() {
 
-	// SocketIO socket
-	const socket = io();
-
-	// process ai-action response
-	socket.on('ai-action', col => {
-		console.log('Socket: AI played column ' + col);
-		markNextFree(col)
-	});
-
 	const delimiters = ["[[", "]]"];
 
 	let game = Vue.observable({
 		state: "entry",
 		gameId: null,
 		mode: null,
+		myColor: '',
+		currentPlayer: 'red',
 	})
 
 	let gameBoard = {};
-	let currentPlayer = 'red';
 	const numRows = 6;
 	const numCols = 7;
 	let numTurns = 0;
@@ -40,6 +32,7 @@ const makeGame = function() {
 
 	const setMultiPlayerMode = function() {
 		game.mode = 'multi';
+		opponent = 'Human';
 	}
 
 	const setSinglePlayerMode = function() {
@@ -82,18 +75,27 @@ const makeGame = function() {
 		}
 
 		// mark free position with piece of current player
-		gameBoard[x][nextY] = currentPlayer;
+		gameBoard[x][nextY] = game.currentPlayer;
+
+		// if the move was made by myColor, emit to server
+		if (game.currentPlayer === game.myColor) {
+			socket.emit('user-action', {
+				col: x,
+				gameId: game.gameId,
+				player: game.myColor,
+			})
+		}
 
 		// todo VUE
 		// set the attribute of the played position to currentPlayer ('red' or 'yellow')
 		document.querySelector('#column-' + x + ' .row-' + nextY + ' circle').setAttribute(
-			'class', currentPlayer
+			'class', game.currentPlayer
 		);
 
 		// check if game is over
 		if (isWinner(parseInt(x), nextY)) {
-			alert(currentPlayer + ' wins!');
-			console.log(currentPlayer + ' wins!');
+			alert(game.currentPlayer + ' wins!');
+			console.log(game.currentPlayer + ' wins!');
 			clearBoard();
 			return true;
 		}
@@ -108,10 +110,10 @@ const makeGame = function() {
 		}
 
 		// change player color
-		currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+		game.currentPlayer = game.currentPlayer === 'red' ? 'yellow' : 'red';
 
 		// automatically get next move from AI unless opponent == human
-		if (currentPlayer === 'yellow' && opponent !== 'Human'){
+		if (game.currentPlayer === 'yellow' && opponent !== 'Human'){
 			getMoveFromAI()
 		}
 
@@ -129,7 +131,7 @@ const makeGame = function() {
 
 		// reset variables
 		numTurns = 0;
-		currentPlayer = 'red';
+		game.currentPlayer = 'red';
 
 		return gameBoard;
 	};
@@ -143,6 +145,8 @@ const makeGame = function() {
 	const getMoveFromAI = function () {
 
 		if (opponent === 'Human') return
+
+		console.log(game.gameId)
 
 		// Emit action to socket
 		socket.emit('ai-action', {
@@ -183,7 +187,7 @@ const makeGame = function() {
 			let i = 1;
 			// Search chain: chain on board && only currentPlayer
 			while (onBoard(currentX + (coords[0] * i), currentY + (coords[1] * i)) &&
-				(gameBoard[currentX + (coords[0] * i)][currentY + (coords[1] * i)] === currentPlayer)) {
+				(gameBoard[currentX + (coords[0] * i)][currentY + (coords[1] * i)] === game.currentPlayer)) {
 				chainLength++;
 				i++;
 			}
@@ -207,7 +211,7 @@ const makeGame = function() {
 		el: "#game-board",
 		computed: {
 			currentPlayer() {
-				return currentPlayer;
+				return game.currentPlayer;
 			},
 			state() {
 				return game.state;
@@ -215,6 +219,7 @@ const makeGame = function() {
 		},
 		methods: {
 			clickColumn: function(col) {
+				if ((game.mode === 'single') || (game.currentPlayer === game.myColor))
 				markNextFree(col)
 			}
 		},
@@ -232,15 +237,23 @@ const makeGame = function() {
 		},
 		methods: {
 			updateGameIdProxy: function() {
-				this.gameIdProxy = globalGameId
+				this.gameIdProxy = game.gameId
 			},
 			joinGame: function() {
 				console.log('join game')
+
+				socket.emit('join', {game: game.gameId})
+				game.myColor = 'yellow';
+
 				setState('play')
 				setMultiPlayerMode();
 			},
 			createGame: function() {
 				console.log('create game')
+
+				socket.emit('create')
+				game.myColor = 'red';
+
 				setState('play')
 				setMultiPlayerMode();
 			},
@@ -266,6 +279,27 @@ const makeGame = function() {
 		},
 	})
 
+	const gameInfoVue = new Vue({
+		delimiters: delimiters,
+		el: "#game-info",
+		computed: {
+			gameId() {
+				return game.gameId;
+			},
+			state() {
+				return game.state;
+			},
+			mode() {
+				return game.mode;
+			},
+			myColor() {
+				return game.myColor;
+			},
+			currentPlayer() {
+				return game.currentPlayer;
+			}
+		},
+	})
 
 	const settingsVue = new Vue({
 		delimiters: delimiters,
@@ -290,10 +324,38 @@ const makeGame = function() {
 			},
 			state() {
 				return game.state;
+			},
+			mode() {
+				return game.mode;
 			}
 		},
 		created() {
 			this.updateOpponentProxy();
 		}
+	})
+
+	// SocketIO socket
+	const socket = io();
+
+	// process ai-action response
+	socket.on('ai-action', col => {
+		console.log('Socket: AI played column ' + col);
+		markNextFree(col)
+	});
+
+	socket.on('create', data => {
+		console.log(data.text)
+		game.gameId = data.game;
+	})
+
+	socket.on('join', data => {
+		console.log(data.text)
+		game.gameId = data.game;
+	})
+
+	// receive action from other player
+	socket.on('user-action', data => {
+		console.log(data.text)
+		if (data.player !== game.myColor) markNextFree(data.col);
 	})
 }

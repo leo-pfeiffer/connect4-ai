@@ -17,6 +17,7 @@ body{
 .boxed {
 	background: #0074D9;
 	border: 4px solid black;
+	color: white;
 }
 
 .card {

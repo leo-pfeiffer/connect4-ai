@@ -17,6 +17,13 @@
         <button class="button is-small" id="ping">Ping</button>
     </div>
 
+    <div id="game-info" class="center boxed" v-show="(state === 'play')">
+        <p v-show="mode === 'multi'">Game ID: [[ gameId ]] -  </p>
+        <p v-show="mode === 'multi'">My Color: [[ myColor ]] -  </p>
+        <p>Turn: [[ currentPlayer ]] - </p>
+        <p>Mode: [[ mode ]]</p>
+    </div>
+
     <div id="entry" class="center boxed" v-show="state === 'entry'">
         <div class="card">
             <div class="card-content">
@@ -41,7 +48,7 @@
     </div>
 
     <div id="setts" class="center boxed" v-show="state === 'play'">
-        <div class="card">
+        <div class="card" v-show="mode === 'single'">
             <div class="card-content">
                 <p>Select opponent:</p><br>
                 <input type="radio" id="Human" name="opponent" value="Human" v-model="gameOpponent">
