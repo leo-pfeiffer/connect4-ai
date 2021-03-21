@@ -13,7 +13,7 @@
     </div>
 
     <div id="game-board" class="center">
-        <div v-for="i in 7" class="column" :id="`column-${i-1}`" :data-x="`${i}`">
+        <div v-for="i in 7" class="column" :id="`column-${i-1}`" :data-x="`${i}`" v-on:click="clickColumn(i-1)">
             <svg v-for="j in 6" :class="`row-${6-j}`" height="70" width="70">
               <circle cx="35" cy="35" r="32" stroke="#0B4E72" stroke-width="2" class="empty" />
             </svg>
@@ -24,21 +24,21 @@
         <div class="card">
             <div class="card-content">
                 <p>Select opponent:</p><br>
-                <input type="radio" id="Human" name="opponent" value="Human">
+                <input type="radio" id="Human" name="opponent" value="Human" v-model="gameOpponent">
                 <label for="Human" color='white'>Human</label><br>
-                <input type="radio" id="AlphaBeta1" name="opponent" value="AlphaBeta1">
+                <input type="radio" id="AlphaBeta1" name="opponent" value="AlphaBeta1" v-model="gameOpponent">
                 <label for="AlphaBeta1">AlphaBeta1</label><br>
-                <input type="radio" id="AlphaBeta2" name="opponent" value="AlphaBeta2">
+                <input type="radio" id="AlphaBeta2" name="opponent" value="AlphaBeta2" v-model="gameOpponent">
                 <label for="AlphaBeta2">AlphaBeta2</label><br>
-                <input type="radio" id="AlphaBeta3" name="opponent" value="AlphaBeta3">
+                <input type="radio" id="AlphaBeta3" name="opponent" value="AlphaBeta3" v-model="gameOpponent">
                 <label for="AlphaBeta3">AlphaBeta3</label><br>
-                <input type="radio" id="AlphaBeta4" name="opponent" value="AlphaBeta4">
+                <input type="radio" id="AlphaBeta4" name="opponent" value="AlphaBeta4" v-model="gameOpponent">
                 <label for="AlphaBeta4">AlphaBeta4</label><br>
-                <input type="radio" id="AlphaBeta5" name="opponent" value="AlphaBeta5">
+                <input type="radio" id="AlphaBeta5" name="opponent" value="AlphaBeta5" v-model="gameOpponent">
                 <label for="AlphaBeta5">AlphaBeta5</label><br>
-                <input type="radio" id="MCTS" name="opponent" value="MCTS">
+                <input type="radio" id="MCTS" name="opponent" value="MCTS" v-model="gameOpponent">
                 <label for="MCTS">MCTS</label><br><br>
-                <button type="button" class="button">Submit</button><br><br>
+                <span>Picked: [[ gameOpponent ]]</span>
             </div>
         </div>
         <div class="card">
