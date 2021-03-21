@@ -9,9 +9,7 @@ body{
 }
 
 .center {
-	width: 730px;
-	/*min-width: 700px;*/
-	/*max-width: 730px;*/
+	width: 585px;
 	margin: auto;
 	display: flex;
 }
@@ -56,7 +54,7 @@ body{
 /* Game */
 
 .column {
-	width: 100px;
+	width: 80px;
 	display: inline-block;
 }
 
