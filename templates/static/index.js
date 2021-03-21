@@ -153,17 +153,6 @@ const makeGame = function() {
 			gameBoard: gameBoard,
 			opponent: opponent
 		})
-
-		// // POST
-		// fetch('/ai-action', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify({ 'list': [gameBoard, opponent]})
-		// }).then(function (response) {
-		// 	return response.text();
-		// }).then(function (col) {
-		// 	console.log('POST: AI played column ' + col);
-		// 	return col;
-		// }).then(markNextFree);
 	};
 
 	// check whether there are four connected pieces
@@ -357,5 +346,13 @@ const makeGame = function() {
 	socket.on('user-action', data => {
 		console.log(data.text)
 		if (data.player !== game.myColor) markNextFree(data.col);
+	})
+
+	// receive action from other player
+	socket.on('disconnect-info', data => {
+		console.log(data.text);
+		alert(data.text)
+		setupGameBoard();
+		setState('entry')
 	})
 }

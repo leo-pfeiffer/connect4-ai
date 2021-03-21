@@ -66,6 +66,14 @@ def get_game_by_id(id):
     return matchingGames[0]
 
 
+def games_of_player(sid: str):
+    return [g for g in games if len([p for p in g.players if p.sid == sid]) > 0]
+
+
+def remove_game(game):
+    return [g for g in games if g.game_id != game.game_id]
+
+
 # Flask
 app = Flask(__name__)
 app._static_folder = os.path.abspath("templates/static/")
@@ -92,6 +100,17 @@ def handle_ping(data):
     print('ping: ' + data['data'])
     emit('ping', 'pong')
 
+
+@socketio.on('disconnect')
+def handle_disconnect():
+
+    text = f"Player {request.sid} disconnected. Game was closed."
+    print(text)
+
+    games_to_remove = games_of_player(request.sid)
+    for game in games_to_remove:
+        remove_game(game)
+        emit('disconnect-info', {'text': text}, room=game.game_id)
 
 # SocketIO === END ===
 
