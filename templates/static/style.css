@@ -5,36 +5,55 @@
 }
 
 body{
-	background: #3399ff;
 	color: white;
-	background-color: #2d2e30;
 }
 
-h2{
-	padding: 10px;
+.center {
+	width: 730px;
+	/*min-width: 700px;*/
+	/*max-width: 730px;*/
+	margin: auto;
+	display: flex;
+}
+
+.card {
+	margin: 5px;
+}
+
+.modal {
+	background-color: lightgray;
 }
 
 /*Header styling*/
 #header {
 	background: #0074D9;
-	width: 730px;
 	padding: 10px 10px 20px;
-	margin-top: 50px;
-	animation-name: headerintro;
-  	animation-duration: 7s;
+	color: white;
+	border: 4px solid black;
+}
+
+#header p {
+	color: white;
 }
 
 /*Game Board Styling*/
 #game-board {
 	background: #0074D9;
-	width: 730px;
 	cursor: pointer;
-	margin: 0 auto;
+	padding-right: 20px;
+	border: 4px solid black;
+}
+
+/*Styling of Settings and Info Text*/
+#setts {
+	background: #0074D9;
 	padding: 10px 10px 20px;
 	border: 4px solid black;
-	animation: gameboardintro;
-	animation-duration: 7s;
+	display: grid;
+	grid-template-areas: "a b";
 }
+
+/* Game */
 
 .column {
 	width: 100px;
@@ -57,156 +76,8 @@ circle.yellow {
 	fill: #DAD400;
 }
 
-/*Styling of Settings and Info Text*/
-#setts {
-	background: #0074D9;
-	width: 730px;
-	padding: 10px 10px 20px;
-	animation: gameboardintro;
-	animation-duration: 7s;
-}
-
-.column2 {
-    float: left;
-}
-
-.settings {
-    width: 200px;
-}
-
-.info {
-    width: 530px;
-}
-
 .row:after {
     content: "";
     display: table;
     clear: both;
 }
-
-/*Radio Button Styling*/
-input[type="radio"]{
-	margin: 8px 0 8px;
-}
-
-label {
-	margin: 8px 0 8px;
-}
-
-
-/*!*ANIMATIONS*!*/
-/*!* Background animation: https://codepen.io/vaibhavarora/pen/xmpxjp*!*/
-/*.backgroundcircle{*/
-/*	position: absolute;*/
-/*	border-radius: 50%;*/
-/*	background: white;*/
-/*	animation: fadeinripple 12s, ripple 15s infinite;*/
-/*	box-shadow: 0px 0px 1px 0px #508fb9;*/
-/*	z-index: -1;*/
-/*}*/
-
-/*.small{*/
-/*	width: 200px;*/
-/*	height: 200px;*/
-/*	left: -100px;*/
-/*	bottom: 200px;*/
-/*}*/
-
-/*.medium{*/
-/*	width: 400px;*/
-/*	height: 400px;*/
-/*	left: -200px;*/
-/*	bottom: 1000px;*/
-/*}*/
-
-/*.large{*/
-/*	width: 600px;*/
-/*	height: 600px;*/
-/*	left: -300px;*/
-/*	bottom: 0px;*/
-/*}*/
-
-/*.xlarge{*/
-/*	width: 800px;*/
-/*	height: 800px;*/
-/*	left: -400px;*/
-/*	bottom: -100px;*/
-/*}*/
-
-/*.xxlarge{*/
-/*	width: 1000px;*/
-/*	height: 1000px;*/
-/*	left: -500px;*/
-/*	bottom: -200px;*/
-/*}*/
-
-/*.shade1{*/
-/*	opacity: 0.2;*/
-/*}*/
-/*.shade2{*/
-/*	opacity: 0.5;*/
-/*}*/
-
-/*.shade3{*/
-/*	opacity: 0.7;*/
-/*}*/
-
-/*.shade4{*/
-/*	opacity: 0.8;*/
-/*}*/
-
-/*.shade5{*/
-/*	opacity: 0.9;*/
-/*}*/
-
-/*@keyframes ripple{*/
-/*  	0%{*/
-/*	  	transform: scale(0.8);*/
-/*  	}*/
-
-/*  	50%{*/
-/*	  	transform: scale(2);*/
-/*  	}*/
-
-/*  	100%{*/
-/*	  	transform: scale(0.8);*/
-/*	}*/
-/*}*/
-
-/*!*Fade in background animation*!*/
-/*@keyframes fadeinripple {*/
-/*	0%{*/
-/*		opacity: 0;*/
-/*	}*/
-/*	40%{*/
-/*		opacity: 0;*/
-/*	}*/
-/*}*/
-
-/*!*Move header from center to top*!*/
-/*@keyframes headerintro {*/
-/*	0%   {*/
-/*		padding: 20% 5% 20% 5%;*/
-/*		opacity: 0;*/
-/*		background-color: #2d2e30;*/
-/*		}*/
-/*	30%   {*/
-/*		padding: 20% 5% 20% 5%;*/
-/*		opacity: 1;*/
-/*		background-color: #2d2e30;*/
-/*		}*/
-/*	70%   {*/
-/*		opacity: 1;*/
-/*		background-color: #2d2e30;*/
-/*		}*/
-/*}*/
-
-/*!*Fade in game board*!*/
-/*@keyframes gameboardintro {*/
-/*	0%   {*/
-/*		opacity: 0;*/
-/*		}*/
-/*	50%   {*/
-/*		opacity: 0;*/
-/*		}*/
-/*}*/

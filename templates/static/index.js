@@ -1,22 +1,20 @@
 window.onload = function() {
-    makeVue();
+    makeSettingsVue();
     makeGameBoardVue();
     makeGame();
+
+    // Modal
+    const modal = document.getElementById('settings-modal')
+	document.getElementById('open-settings-modal').onclick = () => {modal.classList.add('is-active')}
+	document.getElementById('close-settings-modal').onclick = () => {modal.classList.remove('is-active')}
 }
 
-const makeVue = function() {
-    const vue = new Vue({
+const makeSettingsVue = function() {
+    const settingsVue = new Vue({
 		delimiters: ["[[", "]]"],
         el: "#setts",
-        data: {
-			msg: "sflsd",
-			myList: ['a', 'b', 'c', 'd', 'e']
-		},
-        methods: {
-            test: function() {
-                console.log('test test test')
-            }
-        }
+        data: {},
+        methods: {}
     })
 }
 
