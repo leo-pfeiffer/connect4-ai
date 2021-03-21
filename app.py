@@ -6,73 +6,12 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room
 
 import os
 import numpy as np
-import string
-import random
 
 from lib.players import AlphaBeta, MCTS
-
-
-# Keep track of open Games
-class Game:
-    def __init__(self):
-        # random ID
-        self._game_id = ''.join(random.choice(string.ascii_uppercase) for i in range(2))
-        self._players = set()
-
-    @property
-    def game_id(self):
-        return self._game_id
-
-    @property
-    def players(self):
-        return self._players
-
-    def add_player(self, player):
-        assert len(self.players) < 2
-        self._players.add(player)
-
-    def remove_player(self, player):
-        self._players.remove(player)
-
-    def get_player_by_sid(self, sid):
-        if len(self.players) == 0:
-            return None
-        matchingPlayers = [p for p in self.players if p.sid == sid]
-        if len(matchingPlayers) == 0:
-            return None
-        return matchingPlayers[0]
-
-
-# Players
-class Player:
-    def __init__(self, sid):
-        self._sid = sid
-
-    @property
-    def sid(self):
-        return self._sid
-
+from mulitplayer import Game, Player, remove_game, get_game_by_id, games_of_player
 
 # Active games
 games = []
-
-
-def get_game_by_id(id):
-    if len(games) == 0:
-        return None
-    matchingGames = [g for g in games if g.game_id == id]
-    if len(matchingGames) == 0:
-        return None
-    return matchingGames[0]
-
-
-def games_of_player(sid: str):
-    return [g for g in games if len([p for p in g.players if p.sid == sid]) > 0]
-
-
-def remove_game(game):
-    return [g for g in games if g.game_id != game.game_id]
-
 
 # Flask
 app = Flask(__name__)
@@ -81,40 +20,7 @@ app._static_folder = os.path.abspath("templates/static/")
 socketio = SocketIO(app)
 
 
-# SocketIO === START ===
-
-@socketio.on('json')
-def handle_json(json):
-    print('received json: ' + str(json))
-    send(json, json=True)
-
-
-@socketio.on('message')
-def handle_message(data):
-    print('received message: ' + data)
-    send(data)
-
-
-@socketio.on('ping')
-def handle_ping(data):
-    print('ping: ' + data['data'])
-    emit('ping', 'pong')
-
-
-@socketio.on('disconnect')
-def handle_disconnect():
-
-    text = f"Player {request.sid} disconnected. Game was closed."
-    print(text)
-
-    games_to_remove = games_of_player(request.sid)
-    for game in games_to_remove:
-        remove_game(game)
-        emit('disconnect-info', {'text': text}, room=game.game_id)
-
-# SocketIO === END ===
-
-
+# CRUD routes ======
 @app.route('/', methods=['GET'])
 def index():
     return render_template('connect_html.html')
@@ -133,6 +39,7 @@ def ai_action():
         return str(x), 200
 
 
+# SocketIO routes =====
 @socketio.on('ai-action')
 def on_ai_action(data):
     gameBoard = data['gameBoard']
@@ -147,7 +54,7 @@ def on_user_action(data):
 
     game_id = data['gameId']
     assert game_id is not None
-    game = get_game_by_id(game_id)
+    game = get_game_by_id(games, game_id)
     assert game is not None
 
     response_data = {
@@ -222,6 +129,19 @@ def on_leave(data):
     send(request.sid + ' has left the room.', room=room)
 
 
+@socketio.on('disconnect')
+def handle_disconnect():
+
+    text = f"Player {request.sid} disconnected. Game was closed."
+    print(text)
+
+    games_to_remove = games_of_player(games, request.sid)
+    for game in games_to_remove:
+        remove_game(games, game)
+        emit('disconnect-info', {'text': text}, room=game.game_id)
+
+
+# Utils ======
 def gameBoard_to_matrix(gameBoard):
     """Convert the JS gameBoard into a matrix to make it work with the AI implementation"""
     gameBoard = {int(k): v for k, v in gameBoard.items()}
@@ -260,5 +180,4 @@ def call_AI(gameBoard, ai):
 
 
 if __name__ == '__main__':
-    # app.run()
     socketio.run(app)
