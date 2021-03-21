@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import math
 from flask import Flask, render_template, request
+from flask_socketio import SocketIO, send, emit
 
 import os
 import numpy as np
@@ -10,6 +11,24 @@ from lib.players import AlphaBeta, MCTS
 
 app = Flask(__name__)
 app._static_folder = os.path.abspath("templates/static/")
+
+socketio = SocketIO(app)
+
+
+# SocketIO === START ===
+
+@socketio.on('json')
+def handle_json(json):
+    print('received json: ' + str(json))
+    send(json, json=True)
+
+
+@socketio.on('message')
+def handle_message(data):
+    print('received message: ' + data)
+    send(data)
+
+# SocketIO === END ===
 
 
 @app.route('/', methods=['GET'])
@@ -68,4 +87,5 @@ def call_AI(gameBoard, ai):
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    socketio.run(app)
