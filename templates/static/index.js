@@ -10,6 +10,15 @@ window.onload = function() {
 
 const makeGame = function() {
 
+	// SocketIO socket
+	const socket = io();
+
+	// process ai-action response
+	socket.on('ai-action', col => {
+		console.log('Socket: AI played column ' + col);
+		markNextFree(col)
+	});
+
 	const delimiters = ["[[", "]]"];
 
 	let game = Vue.observable({
@@ -120,7 +129,6 @@ const makeGame = function() {
 
 		// reset variables
 		numTurns = 0;
-		opponent = "None";
 		currentPlayer = 'red';
 
 		return gameBoard;
@@ -136,16 +144,22 @@ const makeGame = function() {
 
 		if (opponent === 'Human') return
 
-		// POST
-		fetch('/ai-action', {
-			method: 'POST',
-			body: JSON.stringify({ 'list': [gameBoard, opponent]})
-		}).then(function (response) {
-			return response.text();
-		}).then(function (col) {
-			console.log('AI played column ' + col);
-			return col;
-		}).then(markNextFree);
+		// Emit action to socket
+		socket.emit('ai-action', {
+			gameBoard: gameBoard,
+			opponent: opponent
+		})
+
+		// // POST
+		// fetch('/ai-action', {
+		// 	method: 'POST',
+		// 	body: JSON.stringify({ 'list': [gameBoard, opponent]})
+		// }).then(function (response) {
+		// 	return response.text();
+		// }).then(function (col) {
+		// 	console.log('POST: AI played column ' + col);
+		// 	return col;
+		// }).then(markNextFree);
 	};
 
 	// check whether there are four connected pieces
@@ -201,7 +215,6 @@ const makeGame = function() {
 		},
 		methods: {
 			clickColumn: function(col) {
-				console.log('mark next free fo column ' + col)
 				markNextFree(col)
 			}
 		},

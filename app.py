@@ -28,6 +28,12 @@ def handle_message(data):
     print('received message: ' + data)
     send(data)
 
+
+@socketio.on('ping')
+def handle_ping(data):
+    print('ping: ' + data['data'])
+    emit('ping', 'pong')
+
 # SocketIO === END ===
 
 
@@ -47,6 +53,15 @@ def ai_action():
         x = call_AI(gameBoard, ai)
 
         return str(x), 200
+
+
+@socketio.on('ai-action')
+def handle_ai_action(data):
+    gameBoard = data['gameBoard']
+    ai = data['opponent']
+    x = call_AI(gameBoard, ai)
+
+    emit('ai-action', str(x))
 
 
 def gameBoard_to_matrix(gameBoard):

@@ -14,6 +14,7 @@
 
     <div id="socketio" class="center boxed">
         <button class="button is-small" id="say-hi">Say hi</button>
+        <button class="button is-small" id="ping">Ping</button>
     </div>
 
     <div id="entry" class="center boxed" v-show="state === 'entry'">
@@ -105,8 +106,16 @@
       console.log(data);
     });
 
+    // handle the event sent with socket.send()
+    socket.on('ping', data => {
+      console.log(data);
+    });
+
     document.getElementById('say-hi').onclick = () => {
         socket.send('Hi')
+    }
+    document.getElementById('ping').onclick = () => {
+        socket.emit('ping', {data: 'ping'})
     }
 
 </script>
