@@ -1,3 +1,9 @@
+## Notice
+This is the original version as it was developed for the uni project. 
+For an updated version, check out the [V2](https://github.com/leo-pfeiffer/AI4Connect4/tree/v2)
+branch. This updated version includes several code improvements and most importantly a Socket.io 
+based multiplayer option for the web app.  
+
 ## Connect 4
 The repository contains code for two AI implementations for the well-known
 game Connect Four. Specifically, we've implemented both Alpha-Beta Pruning 
@@ -12,7 +18,7 @@ The latter folder contains the actual code needed for the AI.<br />
     * /templates/static/script.js: JS logic for web app 
     * /templates/static/style.css: style sheet for wep app
     * /templates/connect_html.html: main html file
-    * /flasktest.py: Flask script to integrate python scripts in web app
+    * /app.py: Flask script to integrate python scripts in web app
     
 2. lib
     * /board.py: Sets up the Board class (game board)
@@ -32,7 +38,7 @@ There are different ways to run the scripts and to play the game.
     you to the specified localhost page. Follow the instructions on the screen.
 3. Play online with GUI <br />
     We have published an online version of the game using pythonanwhere.com. 
-    You can play online on https://www.teisendorf.tech
+    You can play online on https://leopfeiffer.pythonanywhere.com/
 
   
 ###### 2.1 Setting up your players in gameplay.py
@@ -71,7 +77,7 @@ The port can be set arbitrarily. Make sure you use a port that's not used alread
 
 ```python
 host = '0.0.0.0'
-port = 5012
+port = 5000
 url = 'http://' + host + ':' + str(port) + '/'  # http://host:port/
 webbrowser.open(url)
 ```
