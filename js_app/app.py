@@ -11,10 +11,10 @@ from lib.players import AlphaBeta, MCTS
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
-app.debug = True
+app.debug = False
 app._static_folder = os.path.abspath("templates/static/")
 host = '0.0.0.0'
-port = 5019
+port = 5000
 url = 'http://' + host + ':' + str(port) + '/'  # http://host:port/
 webbrowser.open(url)
 
